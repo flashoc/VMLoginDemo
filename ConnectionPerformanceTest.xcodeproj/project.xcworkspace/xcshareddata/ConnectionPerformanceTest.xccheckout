@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0C3D7645-0F4C-4AF9-865D-5E8342A16CEC</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ConnectionPerformanceTest</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D3FAAEC8-5F0C-4415-A78F-628A38C60B7E</key>
+		<string>https://github.com/flashoc/VMLoginProject.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ConnectionPerformanceTest.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D3FAAEC8-5F0C-4415-A78F-628A38C60B7E</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/flashoc/VMLoginProject.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D3FAAEC8-5F0C-4415-A78F-628A38C60B7E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D3FAAEC8-5F0C-4415-A78F-628A38C60B7E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>VMLoginProject</string>
+		</dict>
+	</array>
+</dict>
+</plist>

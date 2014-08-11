@@ -73,12 +73,56 @@
                         <outlet property="logBtn" destination="9nV-v3-5yV" id="ka9-Yk-Su5"/>
                         <outlet property="logView" destination="JJL-Aa-l1i" id="ETS-0J-VdZ"/>
                         <outlet property="strBtn" destination="NNr-am-QRl" id="yHb-nN-SK2"/>
-                        <segue destination="GP9-3V-UOa" kind="push" identifier="table" id="gtF-DQ-wYk"/>
+                        <segue destination="kx2-53-FDs" kind="push" id="rF8-bP-P5M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="586" y="205"/>
+            <point key="canvasLocation" x="414" y="205"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="DSL-LY-K7j">
+            <objects>
+                <viewController id="kx2-53-FDs" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="W1G-X2-f0G">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="P8N-dh-8a5"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="480"/>
+                    <connections>
+                        <segue destination="Xih-dl-8mx" kind="push" id="KDE-lm-0CE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ayp-56-vhZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="829" y="205"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="giq-3x-UET">
+            <objects>
+                <viewController id="Xih-dl-8mx" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UhP-12-ard">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="TsE-zP-hch"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="480"/>
+                    <connections>
+                        <segue destination="GP9-3V-UOa" kind="push" id="tW5-YC-6b3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3hj-pZ-whW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1202" y="205"/>
         </scene>
         <!--Navigation Controller - Performance Testing-->
         <scene sceneID="rK6-8f-Gtj">
@@ -154,10 +198,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="d2z-2c-8hF"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="480"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qk-B9-o8I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1105" y="205"/>
+            <point key="canvasLocation" x="1593" y="205"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
