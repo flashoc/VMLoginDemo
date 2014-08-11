@@ -1,0 +1,22 @@
+//
+//  VMViewController.h
+//  ConnectionPerformanceTest
+//
+//  Created by banana on 14-7-31.
+//  Copyright (c) 2014年 VMware. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "VMWebService.h"
+
+@interface VMViewController : UIViewController <VMWebServiceDelegate>
+
+@property (nonatomic, strong) IBOutlet UITextView *logView;
+@property (nonatomic, strong) IBOutlet UIButton *strBtn;
+@property (nonatomic, strong) IBOutlet UIButton *desBtn;
+@property (nonatomic, strong) IBOutlet UIButton *clrBtn;
+@property (nonatomic, strong) IBOutlet UIButton *logBtn;
+
+- (void)appendStringToTextView:(NSString *)str;
+
+@end
