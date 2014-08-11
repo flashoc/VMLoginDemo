@@ -1,4 +1,4 @@
 VMLoginProject
 ==============
 
-My first project in VMware. It has three Versions.
+My first project in VMware. It has three versions.
