@@ -25,6 +25,9 @@ typedef enum _VMRequestType {
 - (void)WebService:(VMWebService *)webService didFailWithError:(NSError *)error;
 - (void)WebService:(VMWebService *)webService didFinishWithXMLData:(NSData *)xmlData;
 
+- (void)WebService:(VMWebService *)webService didFinishWithDictionary:(NSDictionary *)dic;
+- (void)WebService:(VMWebService *)webService didFailWithDictionary:(NSDictionary *)dic;
+
 @end
 
 
@@ -32,15 +35,15 @@ typedef enum _VMRequestType {
 {
 	NSMutableData *receivedData;
 	NSURLConnection *connection;
-	NSStringEncoding encoding;
+//	NSStringEncoding encoding;
 }
 
-- (id)initWithURL:(NSURL *)url;
-- (void)setLocaleRequestWithString:(NSString *)local;
-- (void)getConfiguration;
-- (void)loginWithId:(NSString *)usr andPassWord:(NSString *)psw andDomain:(NSString *)domain;
-- (void)getTunnelConnection;
-- (void)getLaunchItems;
+- (id) initWithURL:(NSURL *)url;
+- (void) setLocaleRequestWithString:(NSString *)local;
+- (void) getConfiguration;
+- (void) loginWithId:(NSString *)usr andPassWord:(NSString *)psw andDomain:(NSString *)domain;
+- (void) getTunnelConnection;
+- (void) getLaunchItems;
 
 @property(nonatomic, strong) NSString *host;
 @property(nonatomic, strong) NSURL *url;

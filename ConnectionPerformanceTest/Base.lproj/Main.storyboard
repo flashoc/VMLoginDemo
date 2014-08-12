@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--View Controller - Performance Testing-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="VMViewController" sceneMemberID="viewController">
+                <viewController title="Performance Testing" id="vXZ-lx-hvc" customClass="VMViewController" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
@@ -41,11 +41,11 @@
                                 <rect key="frame" x="91" y="428" width="65" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="Desktop">
+                                <state key="normal" title="Logout">
                                     <color key="titleShadowColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="showDesktopBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="A8z-XT-c6e"/>
+                                    <action selector="logoutBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="iyy-At-IcW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9nV-v3-5yV">
@@ -73,21 +73,58 @@
                         <outlet property="logBtn" destination="9nV-v3-5yV" id="ka9-Yk-Su5"/>
                         <outlet property="logView" destination="JJL-Aa-l1i" id="ETS-0J-VdZ"/>
                         <outlet property="strBtn" destination="NNr-am-QRl" id="yHb-nN-SK2"/>
-                        <segue destination="kx2-53-FDs" kind="push" id="rF8-bP-P5M"/>
+                        <segue destination="kx2-53-FDs" kind="push" identifier="InputSvrAdrr" id="rF8-bP-P5M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="414" y="205"/>
         </scene>
-        <!--View Controller-->
+        <!--ServerIP Controller - Server Address-->
         <scene sceneID="DSL-LY-K7j">
             <objects>
-                <viewController id="kx2-53-FDs" sceneMemberID="viewController">
+                <viewController title="Server Address" id="kx2-53-FDs" customClass="VMServerIPController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="W1G-X2-f0G">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="server" id="qoe-fw-EVr">
+                                <rect key="frame" x="85" y="70" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Input Server Address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ibH-wh-4l8">
+                                <rect key="frame" x="0.0" y="233" width="320" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Server Address" textAlignment="center" minimumFontSize="17" id="5Bk-tB-88z">
+                                <rect key="frame" x="85" y="262" width="150" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                <connections>
+                                    <outlet property="delegate" destination="kx2-53-FDs" id="4aT-Qd-XCU"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8RN-RG-I2x">
+                                <rect key="frame" x="85" y="300" width="150" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.80534617517743701" green="0.7903492657529545" blue="0.82041864809782605" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Next">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="nextBtnClicked:" destination="kx2-53-FDs" eventType="touchUpInside" id="TDb-HO-ZMz"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="P9l-dH-Dbw" appends="YES" id="Cd0-k8-jbh"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="P8N-dh-8a5"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -95,21 +132,67 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>
                     <connections>
-                        <segue destination="Xih-dl-8mx" kind="push" id="KDE-lm-0CE"/>
+                        <outlet property="addrField" destination="5Bk-tB-88z" id="Lkb-4z-dWt"/>
+                        <outlet property="nxtBtn" destination="8RN-RG-I2x" id="5th-27-ghA"/>
+                        <segue destination="Xih-dl-8mx" kind="push" identifier="LoginView" id="KDE-lm-0CE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ayp-56-vhZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="P9l-dH-Dbw">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="kx2-53-FDs" id="FXF-1d-oOn"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="829" y="205"/>
         </scene>
-        <!--View Controller-->
+        <!--Login View Controller - Logon-->
         <scene sceneID="giq-3x-UET">
             <objects>
-                <viewController id="Xih-dl-8mx" sceneMemberID="viewController">
+                <viewController title="Logon" id="Xih-dl-8mx" customClass="VMLoginViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UhP-12-ard">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login" id="2Ec-Sv-TQn">
+                                <rect key="frame" x="85" y="70" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="username" textAlignment="center" minimumFontSize="17" id="545-fl-Kpa">
+                                <rect key="frame" x="85" y="215" width="150" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Xih-dl-8mx" id="nPy-yk-xXD"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="password" textAlignment="center" minimumFontSize="17" id="gHL-Lj-Rot">
+                                <rect key="frame" x="85" y="261" width="150" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="alphabet" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Xih-dl-8mx" id="UOg-LE-3k3"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zz9-w3-O2m">
+                                <rect key="frame" x="85" y="306" width="150" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.81523672145120263" green="0.79036002514516668" blue="0.88020125679347827" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Login">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="logBtnClicked:" destination="Xih-dl-8mx" eventType="touchUpInside" id="5S6-n1-fi0"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="xBx-st-BpV" appends="YES" id="Wf5-Yl-fjd"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="TsE-zP-hch"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -117,17 +200,25 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>
                     <connections>
-                        <segue destination="GP9-3V-UOa" kind="push" id="tW5-YC-6b3"/>
+                        <outlet property="lgnBtn" destination="zz9-w3-O2m" id="NlL-E2-IXD"/>
+                        <outlet property="pswField" destination="gHL-Lj-Rot" id="UWq-cb-YJs"/>
+                        <outlet property="usrField" destination="545-fl-Kpa" id="VFs-5R-ruD"/>
+                        <segue destination="GP9-3V-UOa" kind="push" identifier="showDesktop" id="tW5-YC-6b3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3hj-pZ-whW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="xBx-st-BpV">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="Xih-dl-8mx" id="XGw-xb-RtX"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1202" y="205"/>
         </scene>
-        <!--Navigation Controller - Performance Testing-->
+        <!--Navigation Controller-->
         <scene sceneID="rK6-8f-Gtj">
             <objects>
-                <navigationController title="Performance Testing" definesPresentationContext="YES" navigationBarHidden="YES" id="6Vn-Tj-g4d" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="6Vn-Tj-g4d" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -143,10 +234,10 @@
             </objects>
             <point key="canvasLocation" x="-11" y="205"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Table View Controller - Desktop Items-->
         <scene sceneID="56v-ox-zI6">
             <objects>
-                <tableViewController id="GP9-3V-UOa" customClass="VMTableViewController" sceneMemberID="viewController">
+                <tableViewController title="Desktop Items" id="GP9-3V-UOa" customClass="VMTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dXb-iG-I3p">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -208,6 +299,10 @@
             <point key="canvasLocation" x="1593" y="205"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="login" width="277" height="194"/>
+        <image name="server" width="859" height="552"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

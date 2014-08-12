@@ -43,15 +43,6 @@
     [[[[self navigationController] navigationBar] topItem] setTitle:@"Performance Test"];
 }
 
-- (VMWebService *)svrConnect{
-    if (!_svrConnect) {
-        NSString *url = [NSString stringWithFormat:@"https://%@/broker/xml",_srvAddr];
-        _svrConnect = [[VMWebService alloc] initWithURL:[NSURL URLWithString:url]];
-        [_svrConnect setDelegate:self];
-    }
-    return _svrConnect;
-}
-
 - (void)viewDidAppear:(BOOL)animated{
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
 }
@@ -67,10 +58,21 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    VMTableViewController *table = [segue destinationViewController];
-    if ([table respondsToSelector:@selector(setDataSource:)]) {
-        [table setValue:_launchItems forKey:@"dataSource"];
+//    VMTableViewController *table = [segue destinationViewController];
+//    if ([table respondsToSelector:@selector(setDataSource:)]) {
+//        [table setValue:_launchItems forKey:@"dataSource"];
+//    }
+}
+
+#pragma mark - PropertyFunction
+
+- (VMWebService *)svrConnect{
+    if (!_svrConnect) {
+        NSString *url = [NSString stringWithFormat:@"https://%@/broker/xml",_srvAddr];
+        _svrConnect = [[VMWebService alloc] initWithURL:[NSURL URLWithString:url]];
+        [_svrConnect setDelegate:self];
     }
+    return _svrConnect;
 }
 
 #pragma mark - VMWebServiceDelegate
@@ -174,7 +176,7 @@
 }
 
 - (void)WebService:(VMWebService *)webService didFailWithError:(NSError *)error{
-    VMPrintlog("Error occur when connect to the server");
+//    VMPrintlog("Error occur when connect to the server");
     [self showAlertWithTitle:@"ERROR" andMessage:[error localizedDescription] andTag:4];
 }
 
@@ -337,8 +339,9 @@
 #pragma mark - IBAction
 
 - (IBAction)startBtnClicked:(id)sender{
-    VMPrintlog("Alert View Of INPUT SERVER ADDRESS Will Show");
-    [self showUserInputFieldWithTitle:INPUTSERVERADDR andMessage:nil];
+    VMPrintlog("View Of Input Server Address Will Show");
+//    [self showUserInputFieldWithTitle:INPUTSERVERADDR andMessage:nil];
+    [self performSegueWithIdentifier:@"InputSvrAdrr" sender:self];
 }
 
 - (IBAction)clearBtnClicked:(id)sender{
@@ -347,13 +350,17 @@
     _clear = YES;
 }
 
-- (IBAction)showDesktopBtnClicked:(id)sender{
-    if (_launchItems) {
-        [self performSegueWithIdentifier:@"table" sender:self];
-    }
-    else
-        [self startBtnClicked:sender];
+- (IBAction)logoutBtnClicked:(id)sender{
+    
 }
+
+//- (IBAction)showDesktopBtnClicked:(id)sender{
+//    if (_launchItems) {
+//        [self performSegueWithIdentifier:@"table" sender:self];
+//    }
+//    else
+//        [self startBtnClicked:sender];
+//}
 
 - (IBAction)showContentOfLogfileBtnClicked:(id)sender{
     

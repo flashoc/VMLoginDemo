@@ -7,6 +7,8 @@
 //
 
 #import "VMWebService.h"
+#import "VMXMLParser.h"
+#import "VMCheckResponseResult.h"
 
 @implementation VMWebService{
 }
@@ -21,21 +23,36 @@
 	return self;
 }
 
+- (id)init
+{
+	if (self = [super init])
+	{
+        NSString *addr = [[NSUserDefaults standardUserDefaults] objectForKey:@"svr_addr"];
+        NSString *urlStr = [NSString stringWithFormat:@"https://%@/broker/xml",addr];
+        _url = [NSURL URLWithString:urlStr];
+        _host = addr;
+	}
+    
+	return self;
+}
+
 - (void)dealloc
 {
 	[connection cancel];
 }
 
+#pragma mark - Interface Implementation
+
 - (void)setLocaleRequestWithString:(NSString *)local{
     self.type = VMSetLocaleRequest;
     
     NSString *xmlString = [NSString stringWithFormat:
-                                @"<?xml version=\"1.0\"?>"
-                                "<broker version=\"2.0\">"
-                                    "<set-locale>"
-                                        "<locale>%@</locale>"
-                                    "</set-locale>"
-                                "</broker>",local];
+                           @"<?xml version=\"1.0\"?>"
+                           "<broker version=\"2.0\">"
+                           "<set-locale>"
+                           "<locale>%@</locale>"
+                           "</set-locale>"
+                           "</broker>",local];
     
     VMPrintlog("Sending [SetLocale] Request ...");
     [self postAsyncWithXML:xmlString withTimeoutInterval:10];
@@ -47,7 +64,7 @@
     NSString *xmlString = [NSString stringWithFormat:
                            @"<?xml version=\"1.0\"?>"
                            "<broker version=\"1.0\">"
-                                "<get-configuration/>"
+                           "<get-configuration/>"
                            "</broker>"];
     
     VMPrintlog("Sending [GetConfiguration] Request ...");
@@ -60,31 +77,31 @@
     NSString *xmlString = [NSString stringWithFormat:
                            @"<?xml version=\"1.0\"?>"
                            "<broker version=\"1.0\">"
-                                "<do-submit-authentication>"
-                                    "<screen>"
-                                        "<name>windows-password</name>"
-                                        "<params>"
-                                            "<param>"
-                                                "<name>username</name>"
-                                                "<values>"
-                                                    "<value>%@</value>"
-                                                "</values>"
-                                            "</param>"
-                                            "<param>"
-                                                "<name>domain</name>"
-                                                "<values>"
-                                                    "<value>%@</value>"
-                                                "</values>"
-                                            "</param>"
-                                            "<param>"
-                                                "<name>password</name>"
-                                                "<values>"
-                                                    "<value>%@</value>"
-                                                "</values>"
-                                            "</param>"
-                                        "</params>"
-                                    "</screen>"
-                                "</do-submit-authentication>"
+                           "<do-submit-authentication>"
+                           "<screen>"
+                           "<name>windows-password</name>"
+                           "<params>"
+                           "<param>"
+                           "<name>username</name>"
+                           "<values>"
+                           "<value>%@</value>"
+                           "</values>"
+                           "</param>"
+                           "<param>"
+                           "<name>domain</name>"
+                           "<values>"
+                           "<value>%@</value>"
+                           "</values>"
+                           "</param>"
+                           "<param>"
+                           "<name>password</name>"
+                           "<values>"
+                           "<value>%@</value>"
+                           "</values>"
+                           "</param>"
+                           "</params>"
+                           "</screen>"
+                           "</do-submit-authentication>"
                            "</broker>",usr,domain,psw];
     
     VMPrintlog("Sending [DoSubmitAuthentication] Request ...");
@@ -97,10 +114,10 @@
     NSString *xmlString = [NSString stringWithFormat:
                            @"<?xml version=\"1.0\"?>"
                            "<broker version=\"9.0\">"
-                                "<get-tunnel-connection>"
-                                    "<bypass-tunnel>true</bypass-tunnel>"
-                                    "<multi-connection-aware>true</multi-connection-aware>"
-                                "</get-tunnel-connection>"
+                           "<get-tunnel-connection>"
+                           "<bypass-tunnel>true</bypass-tunnel>"
+                           "<multi-connection-aware>true</multi-connection-aware>"
+                           "</get-tunnel-connection>"
                            "</broker>"];
     
     VMPrintlog("Sending [getTunnelConnection] Request ...");
@@ -112,31 +129,31 @@
     NSString *xmlString = [NSString stringWithFormat:
                            @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                            "<broker version=\"9.0\">"
-                                "<get-launch-items>"
-                                    "<desktops>"
-                                        "<supported-protocols>"
-                                            "<protocol>"
-                                                "<name>PCOIP</name>"
-                                            "</protocol>"
-                                            "<protocol>"
-                                                "<name>RDP</name>"
-                                            "</protocol>"
-                                        "</supported-protocols>"
-                                    "</desktops>"
-                                    "<applications>"
-                                        "<supported-types>"
-                                            "<type>"
-                                                "<name>remote</name>"
-                                                "<supported-protocols>"
-                                                    "<protocol>"
-                                                        "<name>PCOIP</name>"
-                                                    "</protocol>"
-                                                "</supported-protocols>"
-                                            "</type>"
-                                        "</supported-types>"
-                                    "</applications>"
-                                    "<application-sessions />"
-                                "</get-launch-items>"
+                           "<get-launch-items>"
+                           "<desktops>"
+                           "<supported-protocols>"
+                           "<protocol>"
+                           "<name>PCOIP</name>"
+                           "</protocol>"
+                           "<protocol>"
+                           "<name>RDP</name>"
+                           "</protocol>"
+                           "</supported-protocols>"
+                           "</desktops>"
+                           "<applications>"
+                           "<supported-types>"
+                           "<type>"
+                           "<name>remote</name>"
+                           "<supported-protocols>"
+                           "<protocol>"
+                           "<name>PCOIP</name>"
+                           "</protocol>"
+                           "</supported-protocols>"
+                           "</type>"
+                           "</supported-types>"
+                           "</applications>"
+                           "<application-sessions />"
+                           "</get-launch-items>"
                            "</broker>"];
     
     VMPrintlog("Sending [getLaunchItems] Request ...");
@@ -164,6 +181,8 @@
     
 }
 
+#pragma mark - NSURLConnectionDataDelegate
+
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
 	// every response could mean a redirect
@@ -171,9 +190,9 @@
     
 	// need to record the received encoding
 	// http://stackoverflow.com/questions/1409537/nsdata-to-nsstring-converstion-problem
-	CFStringEncoding cfEncoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)
-                                                                           [response textEncodingName]);
-	encoding = CFStringConvertEncodingToNSStringEncoding(cfEncoding);
+    //	CFStringEncoding cfEncoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)
+    //                                                                           [response textEncodingName]);
+    //	encoding = CFStringConvertEncodingToNSStringEncoding(cfEncoding);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -193,16 +212,129 @@
 // all worked
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-//	NSString *xml = [[NSString alloc] initWithData:receivedData encoding:encoding] ;
-    
-    if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithXMLData:)]) {
-        [self.delegate performSelector:@selector(WebService:didFinishWithXMLData:) withObject:self withObject:receivedData];
+//    NSString *xml = [[NSString alloc] initWithData:receivedData encoding:encoding] ;
+    NSDictionary *res;
+    switch (self.type) {
+        case VMSetLocaleRequest:
+            VMPrintlog("Response of [SetLocale] received");
+            res = [VMXMLParser responseOfSetLocale:receivedData];
+            VMPrintlog("XML of [SetLocale] Parsed");
+            
+            if ([VMCheckResponseResult checkResponseOfSetLocale:res] == VMResponseOK){
+                VMPrintlog("response of [SetLocale] is OK");
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:[_url host] forKey:@"server_addr"];
+                [self getConfiguration];
+            }
+            else{
+                VMPrintlog("Error occur in response of [SetLocale]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            break;
+        case VMGetConfigurationRequest:
+            VMPrintlog("Response of [GetConfiguration] received");
+            res = [VMXMLParser responseOfGetConfiguration:receivedData];
+            VMPrintlog("XML of [GetConfiguration] Parsed");
+            
+            if ([VMCheckResponseResult checkResponseOfGetConfiguration:res] == VMAuthenticationWindowsPassword) {
+                VMPrintlog("response of [GetConfiguration] is WindowsPassword");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFinishWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            else{
+                VMPrintlog("Error occur in response of [GetConfiguration]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            break;
+        case VMDoSubmitAuthentication:
+            VMPrintlog("Response of [DoSubmitAuthentication] received");
+            res = [VMXMLParser responseOfAuthentication:receivedData];
+            VMPrintlog("XML of [DoSubmitAuthentication] Parsed");
+            
+            if ([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationSuccess) {
+                VMPrintlog("response of [DoSubmitAuthentication] is success");
+                [self getTunnelConnection];
+            }
+            else if([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationErrorPassword){
+                VMPrintlog("Error Password in response of [DoSubmitAuthentication]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            else if([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationError){
+                VMPrintlog("Error occur in response of [DoSubmitAuthentication]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            break;
+        case VMGetTunnelConnection:
+            VMPrintlog("Response of [GetTunnelConnection] received");
+            res = [VMXMLParser responseOfGetTunnelConnection:receivedData];
+            VMPrintlog("XML of [GetTunnelConnection] Parsed");
+            
+            if ([VMCheckResponseResult checkResponseOfGetTunnelConnection:res] == VMBypassTunnelSuccess){
+                VMPrintlog("response of [GetTunnelConnection] is success");
+                [self getLaunchItems];
+            }
+            else{
+                VMPrintlog("Error occur in response of [GetTunnelConnection]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            break;
+        case VMGetLaunchItems:
+            VMPrintlog("Response of [GetLaunchItems] received");
+            res = [VMXMLParser responseOfGetLaunchItems:receivedData];
+            VMPrintlog("XML of [GetLaunchItems] Parsed");
+            
+            if ([VMCheckResponseResult checkResponseOfGetLaunchItems:res] == VMGetLaunchItemSuccess){
+                VMPrintlog("response of [GetLaunchItems] is success");
+                VMPrintlog("The Table Of Launch Item will Show");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFinishWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+
+            }
+            else{
+                VMPrintlog("Error occur in response of [GetLaunchItems]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            break;
+        default:
+            break;
     }
+    NSLog(@"xmlResponse = %@",[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 }
 
 // and error occured
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+    VMPrintlog("Error occur when connect to the server");
     if ([self.delegate respondsToSelector:@selector(WebService:didFailWithError:)]) {
         [self.delegate performSelector:@selector(WebService:didFailWithError:) withObject:self withObject:error];
     }
@@ -212,26 +344,26 @@
 - (BOOL)connection:(NSURLConnection *)connection
 canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
 {
-	return [protectionSpace.authenticationMethod
-			isEqualToString:NSURLAuthenticationMethodServerTrust];
+    return [protectionSpace.authenticationMethod
+            isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
 
 - (void)connection:(NSURLConnection *)connection
 didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-	if ([challenge.protectionSpace.authenticationMethod
-		 isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		// we only trust our own domain
-		if ([challenge.protectionSpace.host isEqualToString:self.host])
-		{
-			NSURLCredential *credential =
+    if ([challenge.protectionSpace.authenticationMethod
+         isEqualToString:NSURLAuthenticationMethodServerTrust])
+    {
+        // we only trust our own domain
+        if ([challenge.protectionSpace.host isEqualToString:self.host])
+        {
+            NSURLCredential *credential =
             [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
-			[challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
-		}
-	}
+            [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+        }
+    }
     
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
 @end
