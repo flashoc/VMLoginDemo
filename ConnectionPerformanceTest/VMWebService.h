@@ -15,7 +15,8 @@ typedef enum _VMRequestType {
 	VMGetConfigurationRequest,
     VMDoSubmitAuthentication,
     VMGetTunnelConnection,
-    VMGetLaunchItems
+    VMGetLaunchItems,
+    VMDoLogout
 } VMRequestType;
 
 @protocol VMWebServiceDelegate <NSObject>
@@ -44,6 +45,7 @@ typedef enum _VMRequestType {
 - (void) loginWithId:(NSString *)usr andPassWord:(NSString *)psw andDomain:(NSString *)domain;
 - (void) getTunnelConnection;
 - (void) getLaunchItems;
+- (void) logout;
 
 @property(nonatomic, strong) NSString *host;
 @property(nonatomic, strong) NSURL *url;

@@ -37,11 +37,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
-    [[[[self navigationController] navigationBar] topItem] setTitle:[self title]];
+//    [[[[self navigationController] navigationBar] topItem] setTitle:[self title]];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    VMPrintlog("The Table Of Launch Item Did Show");
+    VMPrintlog("View Of Desktop Did Show");
 }
 
 - (void)didReceiveMemoryWarning

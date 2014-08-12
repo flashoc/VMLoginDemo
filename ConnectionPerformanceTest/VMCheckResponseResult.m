@@ -10,6 +10,13 @@
 
 @implementation VMCheckResponseResult
 
++ (VMResponseState)checkResponseOfDoLogout:(NSDictionary *)res{
+    if ([[res objectForKey:@"result"] isEqualToString:@"ok"]) {
+        return VMDoLogoutSuccess;
+    }
+    return VMResponseError;
+}
+
 + (VMResponseState)checkResponseOfSetLocale:(NSDictionary *)res{
     if ([[res objectForKey:@"result"] isEqualToString:@"ok"]) {
         return VMResponseOK;

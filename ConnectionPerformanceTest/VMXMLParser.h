@@ -15,6 +15,7 @@
 + (NSDictionary *)responseOfAuthentication:(NSData *)xmlData;
 + (NSDictionary *)responseOfGetTunnelConnection:(NSData *)xmlData;
 + (NSDictionary *)responseOfGetLaunchItems:(NSData *)xmlData;
++ (NSDictionary *)responseOfDoLogout:(NSData *)xmlData;
 
 + (NSDictionary *)getResultDic;
 

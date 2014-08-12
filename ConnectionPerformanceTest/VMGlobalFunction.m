@@ -14,9 +14,9 @@ void VMPrintlog(const char * log){
     dispatch_once(&pred, ^{dateFormatter = [[NSDateFormatter alloc] init];
                            [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];});
     
-    const char *threadInfo = [[[NSThread currentThread] description] UTF8String];
+//    const char *threadInfo = [[[NSThread currentThread] description] UTF8String];
     const char *date = [[dateFormatter stringFromDate:[NSDate date]] UTF8String];
     
-    printf("%s in thread:%s: %s\n", date, threadInfo, log);
+    printf("%s: %s\n", date, log);
     fflush(stdout);
 }

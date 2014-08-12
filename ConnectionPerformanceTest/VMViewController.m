@@ -29,6 +29,7 @@
     NSString *_psw;
     NSDictionary *_launchItems;
     BOOL _clear;
+    UIActivityIndicatorView* _aiv;
 }
 
 #pragma mark - UIViewController
@@ -38,7 +39,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     _clear = NO;
-    _launchItems = nil;
     [self setSubviewsLayout];
     [[[[self navigationController] navigationBar] topItem] setTitle:@"Performance Test"];
 }
@@ -68,7 +68,7 @@
 
 - (VMWebService *)svrConnect{
     if (!_svrConnect) {
-        NSString *url = [NSString stringWithFormat:@"https://%@/broker/xml",_srvAddr];
+        NSString *url = [NSString stringWithFormat:@"https://%@/broker/xml",[[NSUserDefaults standardUserDefaults] objectForKey:@"server_addr"]];
         _svrConnect = [[VMWebService alloc] initWithURL:[NSURL URLWithString:url]];
         [_svrConnect setDelegate:self];
     }
@@ -77,167 +77,36 @@
 
 #pragma mark - VMWebServiceDelegate
 
-- (void)WebService:(VMWebService *)webService didFinishWithXMLData:(NSData *)xmlData{
-    NSDictionary *res = nil;
+- (void)WebService:(VMWebService *)webService didFailWithError:(NSError *)error{
     
-    switch (webService.type) {
-        case VMSetLocaleRequest:
-            VMPrintlog("Response of [SetLocale] received");
-            res = [VMXMLParser responseOfSetLocale:xmlData];
-            VMPrintlog("XML of [SetLocale] Parsed");
-            [self showDicToScreen:res withDomain:@"SetLocale"];
-            
-            if ([VMCheckResponseResult checkResponseOfSetLocale:res] == VMResponseOK){
-                VMPrintlog("response of [SetLocale] is OK");
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setObject:_srvAddr forKey:@"server_addr"];
-                [self.svrConnect getConfiguration];
-            }
-            else{
-                VMPrintlog("Error occur in response of [SetLocale]");
-                [self showAlertWithTitle:@"ERROR" andMessage:@"SetLcale Error" andTag:1];}
-            break;
-            
-        case VMGetConfigurationRequest:
-            VMPrintlog("Response of [GetConfiguration] received");
-            res = [VMXMLParser responseOfGetConfiguration:xmlData];
-            VMPrintlog("XML of [GetConfiguration] Parsed");
-            [self showDicToScreen:res withDomain:@"GetConfiguration"];
-            
-            if ([VMCheckResponseResult checkResponseOfGetConfiguration:res] == VMAuthenticationWindowsPassword) {
-                VMPrintlog("response of [GetConfiguration] is WindowsPassword");
-                VMPrintlog("Alert View Of LOGIN TO SERVER Will Show");
-                [self showUserInputFieldWithTitle:LOGINTOSERVER andMessage:[[NSUserDefaults standardUserDefaults] objectForKey:@"server_addr"]];
-            }
-            else{
-                VMPrintlog("Error occur in response of [GetConfiguration]");
-                [self showAlertWithTitle:@"ERROR" andMessage:[res objectForKey:@"error-message"] andTag:2];
-            }
-            break;
-            
-        case VMDoSubmitAuthentication:
-            VMPrintlog("Response of [DoSubmitAuthentication] received");
-            res = [VMXMLParser responseOfAuthentication:xmlData];
-            VMPrintlog("XML of [DoSubmitAuthentication] Parsed");
-            [self showDicToScreen:res withDomain:@"SubmitAuthentication"];
-            
-            if ([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationSuccess) {
-                VMPrintlog("response of [DoSubmitAuthentication] is success");
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setObject:_usr forKey:@"user"];
-                [userDefaults setObject:_psw forKey:@"password"];
-                [self.svrConnect getTunnelConnection];
-            }
-            else if([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationErrorPassword){
-                VMPrintlog("Error Password in response of [DoSubmitAuthentication]");
-                [self showAlertWithTitle:@"ERROR" andMessage:[res objectForKey:@"error"] andTag:3];
-            }
-            else if([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationError){
-                VMPrintlog("Error occur in response of [DoSubmitAuthentication]");
-                NSString *errStr = [NSString stringWithFormat:@"%@ %@",[res objectForKey:@"error-message"],[res objectForKey:@"user-message"]];
-                [self showAlertWithTitle:@"ERROR" andMessage:errStr andTag:3];
-            }
-            break;
-            
-        case VMGetTunnelConnection:
-            VMPrintlog("Response of [GetTunnelConnection] received");
-            res = [VMXMLParser responseOfGetTunnelConnection:xmlData];
-            VMPrintlog("XML of [GetTunnelConnection] Parsed");
-            [self showDicToScreen:res withDomain:@"GetTunnelConnection"];
-            
-            if ([VMCheckResponseResult checkResponseOfGetTunnelConnection:res] == VMBypassTunnelSuccess){
-                VMPrintlog("response of [GetTunnelConnection] is success");
-                [self.svrConnect getLaunchItems];
-            }
-            else{
-                VMPrintlog("Error occur in response of [GetTunnelConnection]");
-                [self showAlertWithTitle:@"ERROR" andMessage:@"Get Tunnel Connection Error" andTag:1];}
-            break;
-            
-        case VMGetLaunchItems:
-            VMPrintlog("Response of [GetLaunchItems] received");
-            res = [VMXMLParser responseOfGetLaunchItems:xmlData];
-            VMPrintlog("XML of [GetLaunchItems] Parsed");
-            _launchItems = res;
-            
-            if ([VMCheckResponseResult checkResponseOfGetLaunchItems:res] == VMGetLaunchItemSuccess){
-                VMPrintlog("response of [GetLaunchItems] is success");
-                VMPrintlog("The Table Of Launch Item will Show");
-                [self performSegueWithIdentifier:@"table" sender:self];
-            }
-            else{
-                VMPrintlog("Error occur in response of [GetLaunchItems]");
-                [self showAlertWithTitle:@"ERROR" andMessage:@"Get Launch Items Error" andTag:1];}
-            break;
-        default:
-            break;
-    }
-//   NSLog(@"xmlResponse = %@",[[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding]);
+    [self showAlertWithTitle:@"ERROR" andMessage:[error localizedDescription] andTag:4];
 }
 
-- (void)WebService:(VMWebService *)webService didFailWithError:(NSError *)error{
-//    VMPrintlog("Error occur when connect to the server");
-    [self showAlertWithTitle:@"ERROR" andMessage:[error localizedDescription] andTag:4];
+- (void)WebService:(VMWebService *)webService didFinishWithDictionary:(NSDictionary *)dic{
+    [_aiv stopAnimating];
+    if (webService.type == VMDoLogout) {
+        [self showAlertWithTitle:@"Logout Success" andMessage:nil andTag:1];
+    }
+}
+
+- (void)WebService:(VMWebService *)webService didFailWithDictionary:(NSDictionary *)dic{
+    [_aiv stopAnimating];
+    if (webService.type == VMDoLogout) {
+        NSString *errStr = [NSString stringWithFormat:@"%@",[dic objectForKey:@"error-message"]];
+        [self showAlertWithTitle:@"ERROR" andMessage:errStr andTag:1];
+    }
 }
 
 #pragma mark - UIAlertViewDelegate
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    //弹出的提示框为服务器地址输入框时
-    if ([[alertView title] isEqualToString:INPUTSERVERADDR]) {
-        if (buttonIndex == 0) {
-            return;
-        }
-        else{
-            _srvAddr = [[alertView textFieldAtIndex:0] text];
-            [self.svrConnect setLocaleRequestWithString:@"en_GB"];
-        }
-    }
-    
-    //弹出的提示框为用户名和密码输入框时
-    else if ([[alertView title] isEqualToString:LOGINTOSERVER]) {
-        if (buttonIndex == 0)
-            return; //Cancel
-        else{
-            _usr = [[alertView textFieldAtIndex:0] text];
-            _psw = [[alertView textFieldAtIndex:1] text];
-            [self.svrConnect loginWithId:_usr andPassWord:_psw andDomain:[[VMXMLParser getResultDic] objectForKey:@"domain"]];
-        }
-        
-    }
-    
-    //弹出的提示框为错误警告时
-    else if ([[alertView title] isEqualToString:@"ERROR"]){
-        switch ([alertView tag]) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                [self showUserInputFieldWithTitle:LOGINTOSERVER andMessage:[[NSUserDefaults standardUserDefaults] objectForKey:@"server_addr"]];
-                break;
-            case 4:
-                [self showUserInputFieldWithTitle:INPUTSERVERADDR andMessage:nil];
-                break;
-            case 5:
-                break;
-            default:
-                break;
-        }
-    }
-}
-
 - (void)didPresentAlertView:(UIAlertView *)alertView{
-    if ([[alertView title] isEqualToString:INPUTSERVERADDR]) {
-        VMPrintlog("Alert View Of INPUT SERVER ADDRESS Did Show");
-    }
-    else if ([[alertView title] isEqualToString:LOGINTOSERVER]) {
-        VMPrintlog("Alert View Of LOGIN TO SERVER Did Show");
-    }
-    else if ([[alertView title] isEqualToString:@"ERROR"]){
-        VMPrintlog("Alert View Of Error Did Show");
-    }
     
+    if ([[alertView title] isEqualToString:@"ERROR"]){
+        VMPrintlog("Alert View Of ERROR Did Show");
+    }
+    else if ([[alertView title] isEqualToString:@"Logout Success"]){
+        VMPrintlog("Alert View Of Logout Did Show");
+    }
 }
 
 #pragma mark - User Defined Functions
@@ -313,13 +182,14 @@
 
 - (void)showAlertWithTitle:(NSString *)title andMessage:(NSString*)message andTag:(NSInteger)tag
 {
-    VMPrintlog("Alert View Of Error Will Show");
+    NSString *log = [NSString stringWithFormat:@"Alert View Of %@ Will Show",title];
+    VMPrintlog([log UTF8String]);
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                         message:message
                                                        delegate:self
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
-    [alertView setTag:tag];
+//    [alertView setTag:tag];
     
     [alertView show];
 }
@@ -340,30 +210,37 @@
 
 - (IBAction)startBtnClicked:(id)sender{
     VMPrintlog("View Of Input Server Address Will Show");
-//    [self showUserInputFieldWithTitle:INPUTSERVERADDR andMessage:nil];
-    [self performSegueWithIdentifier:@"InputSvrAdrr" sender:self];
+    [self performSegueWithIdentifier:@"InputSvrAdrr" sender:sender];
 }
 
 - (IBAction)clearBtnClicked:(id)sender{
-    
+    NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:[[NSUserDefaults standardUserDefaults] objectForKey:@"logFilePath"]];
+    [file truncateFileAtOffset:0];
     [self.logView setText:[NSString stringWithFormat:@"Log Message:"]];
     _clear = YES;
 }
 
 - (IBAction)logoutBtnClicked:(id)sender{
-    
+    [self performSelector:@selector(showWaitingView)];
+    [self.svrConnect logout];
 }
 
-//- (IBAction)showDesktopBtnClicked:(id)sender{
-//    if (_launchItems) {
-//        [self performSegueWithIdentifier:@"table" sender:self];
-//    }
-//    else
-//        [self startBtnClicked:sender];
-//}
+- (IBAction)showlogBtnClicked:(id)sender{
+    [self.logView setText:nil];
+    NSString *log = [NSString stringWithContentsOfFile:[[NSUserDefaults standardUserDefaults] objectForKey:@"logFilePath"]
+                                              encoding:NSUTF8StringEncoding
+                                                 error:nil];
+    [self.logView setText:log];
+}
 
-- (IBAction)showContentOfLogfileBtnClicked:(id)sender{
-    
+- (void)showWaitingView {
+    if (!_aiv) {
+        _aiv = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width/2 - 50, [[UIScreen mainScreen] bounds].size.height/2 - 85,100,100)];
+        _aiv.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+        _aiv.color = [UIColor darkGrayColor];
+        [self.view addSubview:_aiv];
+    }
+    [_aiv startAnimating];
 }
 
 @end

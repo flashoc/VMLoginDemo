@@ -19,6 +19,31 @@ static NSDictionary *_resultDic = nil;
     return _resultDic;
 }
 
++ (NSDictionary *)responseOfDoLogout:(NSData *)xmlData{
+    if (xmlData != nil) {
+        NSMutableDictionary *dic = nil;
+        GDataXMLDocument *xmlDoc = [[GDataXMLDocument alloc] initWithData:xmlData options:0 error:nil];
+        GDataXMLElement *rootElement = [xmlDoc rootElement];
+        GDataXMLElement *logoutElement = [[rootElement elementsForName:@"logout"] objectAtIndex:0];
+        GDataXMLElement *resultElement = [[logoutElement elementsForName:@"result"] objectAtIndex:0];
+        
+        dic = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[resultElement stringValue],[resultElement name], nil];
+        
+        if ([[resultElement stringValue] isEqualToString:@"error"]){
+            
+            GDataXMLElement *errcElement = [[logoutElement elementsForName:@"error-code"] objectAtIndex:0];
+            GDataXMLElement *errmsgElement = [[logoutElement elementsForName:@"error-message"] objectAtIndex:0];
+            [dic setObject:[errcElement stringValue] forKey:[errcElement name]];
+            [dic setObject:[errmsgElement stringValue] forKey:[errmsgElement name]];
+            
+        }
+        
+        _resultDic = dic;
+        return dic;
+    }
+    return nil;
+}
+
 + (NSDictionary *)responseOfSetLocale:(NSData *)xmlData{
     if (xmlData != nil) {
         NSMutableDictionary *dic = nil;

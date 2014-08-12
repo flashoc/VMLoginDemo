@@ -37,6 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    [[[[self navigationController] navigationBar] topItem] setTitle:[self title]];
     // Do any additional setup after loading the view.
     self.usrField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
     self.pswField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"password"];
@@ -115,9 +116,14 @@
 #pragma mark - VMWebServiceDelegate
 
 - (void)WebService:(VMWebService *)webService didFinishWithDictionary:(NSDictionary *)dic{
-    _launchItems = dic;
-    [self showDesktopItems];
-    
+    if (webService.type == VMGetLaunchItems) {
+        _launchItems = dic;
+        [self showDesktopItems];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:self.usrField.text forKey:@"username"];
+        [userDefaults setObject:self.pswField.text forKey:@"password"];
+    }
 }
 
 - (void)WebService:(VMWebService *)webService didFailWithDictionary:(NSDictionary *)dic{
@@ -132,7 +138,6 @@
             }
             break;
         case VMGetTunnelConnection:
-            [self showAlertWithTitle:@"ERROR" andMessage:@"Get Launch Items Error"];
             [self showAlertWithTitle:@"ERROR" andMessage:@"Get Tunnel Connection Error"];
             break;
         case VMGetLaunchItems:

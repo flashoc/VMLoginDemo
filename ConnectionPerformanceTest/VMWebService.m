@@ -160,6 +160,19 @@
     [self postAsyncWithXML:xmlString withTimeoutInterval:-1];
 }
 
+- (void) logout{
+    self.type = VMDoLogout;
+    
+    NSString *xmlString = [NSString stringWithFormat:
+                           @"<?xml version=\"1.0\"?>"
+                           "<broker version=\"1.0\">"
+                                "<do-logout/>"
+                           "</broker>"];
+    
+    VMPrintlog("Sending [DoLogout] Request ...");
+    [self postAsyncWithXML:xmlString withTimeoutInterval:-1];
+}
+
 //异步post XML
 - (void)postAsyncWithXML:(NSString *)xmlStr withTimeoutInterval:(NSTimeInterval)seconds
 {
@@ -222,8 +235,6 @@
             
             if ([VMCheckResponseResult checkResponseOfSetLocale:res] == VMResponseOK){
                 VMPrintlog("response of [SetLocale] is OK");
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setObject:[_url host] forKey:@"server_addr"];
                 [self getConfiguration];
             }
             else{
@@ -308,7 +319,6 @@
             
             if ([VMCheckResponseResult checkResponseOfGetLaunchItems:res] == VMGetLaunchItemSuccess){
                 VMPrintlog("response of [GetLaunchItems] is success");
-                VMPrintlog("The Table Of Launch Item will Show");
                 if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithDictionary:)]) {
                     [self.delegate performSelector:@selector(WebService:didFinishWithDictionary:)
                                         withObject:self
@@ -325,10 +335,34 @@
                 }
             }
             break;
+        case VMDoLogout:
+            VMPrintlog("Response of [DoLogout] received");
+            res = [VMXMLParser responseOfDoLogout:receivedData];
+            VMPrintlog("XML of [DoLogout] Parsed");
+            
+            if ([VMCheckResponseResult checkResponseOfDoLogout:res] == VMDoLogoutSuccess){
+                VMPrintlog("response of [DoLogout] is success");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFinishWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+                
+            }
+            else{
+                VMPrintlog("Error occur in response of [DoLogout]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            
+            break;
         default:
             break;
     }
-    NSLog(@"xmlResponse = %@",[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+//    NSLog(@"xmlResponse = %@",[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 }
 
 // and error occured

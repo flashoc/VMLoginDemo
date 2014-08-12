@@ -92,7 +92,11 @@
 #pragma mark - VMWebServiceDelegate
 
 - (void)WebService:(VMWebService *)webService didFinishWithDictionary:(NSDictionary *)dic{
-    [self nextView];
+    if (webService.type == VMGetConfigurationRequest) {
+        [self nextView];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:self.addrField.text forKey:@"server_addr"];
+    }
 }
 - (void)WebService:(VMWebService *)webService didFailWithDictionary:(NSDictionary *)dic{
     switch (webService.type) {
@@ -149,7 +153,6 @@
                                                        delegate:self
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
-    //    [alertView setTag:tag];
     
     [alertView show];
 }

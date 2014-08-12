@@ -18,6 +18,7 @@
     [self redirectStdoutToLocalFile];
     
     VMPrintlog("Main Thread Start");
+    
     return YES;
 }
 							
@@ -53,9 +54,9 @@
 - (void)redirectStdoutToLocalFile{
 
     //如果已经连接Xcode调试则不输出到文件
-    if(isatty(STDOUT_FILENO)) {
+//    if(isatty(STDOUT_FILENO)) {
 //        return;
-    }
+//    }
     
     //将NSlog打印信息保存到Document目录下的Log文件夹下
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -64,7 +65,10 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
 	BOOL fileExists = [fileManager fileExistsAtPath:logDirectory];
     if (!fileExists) {
-		[fileManager createDirectoryAtPath:logDirectory  withIntermediateDirectories:YES attributes:nil error:nil];
+		[fileManager createDirectoryAtPath:logDirectory
+               withIntermediateDirectories:YES
+                                attributes:nil
+                                     error:nil];
 	}
     
     //每次启动后都保存一个新的以当前时间命名的日志文件中
@@ -74,6 +78,7 @@
     
     NSString *logFilePath = [logDirectory stringByAppendingFormat:@"/%@.log",dateStr];
     
+    [[NSUserDefaults standardUserDefaults] setObject:logFilePath forKey:@"logFilePath"];
     // 将log输入到文件
     freopen([logFilePath UTF8String], "a+", stdout);
 }
