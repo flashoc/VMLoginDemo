@@ -1,22 +1,18 @@
 //
-//  VMTableViewController.m
+//  VMLogTableViewController.m
 //  ConnectionPerformanceTest
 //
-//  Created by banana on 14-8-6.
+//  Created by banana on 14-8-13.
 //  Copyright (c) 2014年 VMware. All rights reserved.
 //
 
-#import "VMTableViewController.h"
-#import "SDWebImage/UIImageView+WebCache.h"
-#import "VMTableViewCell.h"
-#import "VMApplication.h"
-#import "VMIcon.h"
+#import "VMLogTableViewController.h"
 
-@interface VMTableViewController ()
+@interface VMLogTableViewController ()
 
 @end
 
-@implementation VMTableViewController
+@implementation VMLogTableViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -35,13 +31,11 @@
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    [[self navigationController] setNavigationBarHidden:NO animated:YES];
-//    [[[[self navigationController] navigationBar] topItem] setTitle:[self title]];
+//    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-    VMPrintlog("..View Of Launch Items Did Show..");
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -63,41 +57,51 @@
 {
 //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    NSArray *array = [_dataSource objectForKey:@"applications"];
-    
-    return [array count];
+    return [_directoryContent count];
 }
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"tableCell";
-    VMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    if (cell == nil)
-    {
-        cell = [[VMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                       reuseIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"directoryViewCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    
     // Configure the cell...
-    VMApplication *app = [[_dataSource objectForKey:@"applications"] objectAtIndex:[indexPath row]];
-    [[cell name] setText:[app name]];
-    [[cell version] setText:[app version]];
-    [[cell publisher] setText:[app publisher]];
+    [cell textLabel].text = [_directoryContent objectAtIndex:indexPath.row];
     
-    NSString *url = [NSString stringWithFormat:@"https://%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"server_addr"]];
-    VMIcon *icon = [[app icons] objectAtIndex:0];
-    [[cell icon] setImageWithURL:[NSURL URLWithString:[url stringByAppendingString:[icon path]]]
-                   placeholderImage:[UIImage imageNamed:@"Default-icon"]];
-    
-//    for (VMIcon *icon in [app icons]) {
-//        NSString *src = [url stringByAppendingString:[icon path]];
-//        NSLog(@"url = %@, %@ * %@",src,[icon width],[icon height]);
-//        
-//    }
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *selected = [_directoryContent objectAtIndex:indexPath.row];
+    NSString *selectedPath = [_directoryPath stringByAppendingPathComponent:selected];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:selectedPath]) {
+        if ([self.delegate respondsToSelector:@selector(showTheLogAtPath:)]) {
+            [self.delegate performSelector:@selector(showTheLogAtPath:)
+                                withObject:selectedPath];
+        }
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
+}
+
+#pragma mark - setter
+
+- (void)setDirectoryPath:(NSString *)directoryPath{
+    _directoryPath = directoryPath;
+    [self loadDirectoryContent];
+}
+
+#pragma mark - user defined
+
+- (void)loadDirectoryContent{
+    _directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:_directoryPath error:nil];
+}
 
 /*
 // Override to support conditional editing of the table view.

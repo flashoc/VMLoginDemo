@@ -19,7 +19,7 @@ typedef enum _VMResponseState {
     VMAuthenticationSuccess,
     VMAuthenticationFailed,
     VMGetLaunchItemSuccess,
-    VMDoLogoutSuccess
+    VMDoLogoutSuccess,
 } VMResponseState;
 
 @interface VMCheckResponseResult : NSObject
@@ -30,5 +30,8 @@ typedef enum _VMResponseState {
 + (VMResponseState)checkResponseOfGetTunnelConnection:(NSDictionary *)res;
 + (VMResponseState)checkResponseOfGetLaunchItems:(NSDictionary *)res;
 + (VMResponseState)checkResponseOfDoLogout:(NSDictionary *)res;
+
++ (VMResponseState)checkResponseOfSetLocaleAndGetConfig:(NSDictionary *)res;
++ (VMResponseState)checkResponseOfGetTunnelAndLaunchItems:(NSDictionary *)res;
 
 @end

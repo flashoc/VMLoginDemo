@@ -8,15 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "VMWebService.h"
+#import "VMLogTableViewController.h"
 
-@interface VMViewController : UIViewController <VMWebServiceDelegate>
+@interface VMViewController : UIViewController <VMWebServiceDelegate, VMLogTableViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextView *logView;
 @property (nonatomic, strong) IBOutlet UIButton *strBtn;
 @property (nonatomic, strong) IBOutlet UIButton *desBtn;
 @property (nonatomic, strong) IBOutlet UIButton *clrBtn;
 @property (nonatomic, strong) IBOutlet UIButton *logBtn;
-
-- (void)appendStringToTextView:(NSString *)str;
 
 @end

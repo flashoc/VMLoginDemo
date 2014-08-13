@@ -17,6 +17,9 @@
 + (NSDictionary *)responseOfGetLaunchItems:(NSData *)xmlData;
 + (NSDictionary *)responseOfDoLogout:(NSData *)xmlData;
 
++ (NSDictionary *)responseOfSetLocaleAndGetConfig:(NSData *)xmlData;
++ (NSDictionary *)responseOfGetTunnelAndLaunchItems:(NSData *)xmlData;
+
 + (NSDictionary *)getResultDic;
 
 @end

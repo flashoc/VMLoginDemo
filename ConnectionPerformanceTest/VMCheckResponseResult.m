@@ -10,6 +10,15 @@
 
 @implementation VMCheckResponseResult
 
++ (VMResponseState)checkResponseOfSetLocaleAndGetConfig:(NSDictionary *)res{
+    if ([[res objectForKey:@"result"] isEqualToString:@"ok"]) {
+        if ([[res objectForKey:@"name"] isEqualToString:@"windows-password"]) {
+            return VMAuthenticationWindowsPassword;
+        }
+    }
+    return VMResponseError;
+}
+
 + (VMResponseState)checkResponseOfDoLogout:(NSDictionary *)res{
     if ([[res objectForKey:@"result"] isEqualToString:@"ok"]) {
         return VMDoLogoutSuccess;
@@ -44,6 +53,13 @@
         return VMAuthenticationError;
     }
     return VMAuthenticationFailed;
+}
+
++ (VMResponseState)checkResponseOfGetTunnelAndLaunchItems:(NSDictionary *)res{
+    if ([[res objectForKey:@"result"] isEqualToString:@"ok"]) {
+        return VMGetLaunchItemSuccess;
+    }
+    return VMResponseError;
 }
 
 + (VMResponseState)checkResponseOfGetTunnelConnection:(NSDictionary *)res{

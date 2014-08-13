@@ -20,6 +20,7 @@
     NSInteger _distance; //屏幕移动的距离
     CGRect _frame; //保存移动前屏幕的位置
     BOOL _offset; //屏幕是否已经在偏移
+    BOOL _switchOfLog; //日志开关
     NSDictionary *_launchItems;
 }
 
@@ -37,11 +38,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    [[[[self navigationController] navigationBar] topItem] setTitle:[self title]];
+    //    [[[[self navigationController] navigationBar] topItem] setTitle:[self title]];
     // Do any additional setup after loading the view.
     self.usrField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
     self.pswField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"password"];
     _offset = NO;
+    _switchOfLog = YES;
     _launchItems = nil;
 }
 
@@ -51,7 +53,11 @@
         [self.usrField resignFirstResponder];
         [self.pswField resignFirstResponder];
     }
-    VMPrintlog("View Of Input Username And Password Did Show");
+    if (_switchOfLog) {
+        VMPrintlog("..View Of Input Username And Password Did Show..");
+        //从下个界面返回时不再打印日志
+        _switchOfLog = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,7 +81,7 @@
     NSString *usr = self.usrField.text;
     NSString *psw = self.pswField.text;
     
-    VMWebService *ws = [[VMWebService alloc] init];
+    VMWebService *ws = [VMWebService sharedSingleton];
     ws.delegate = self;
     
     [ws loginWithId:usr andPassWord:psw andDomain:[[VMXMLParser getResultDic] objectForKey:@"domain"]];
@@ -94,7 +100,7 @@
 }
 
 - (void)showDesktopItems{
-    VMPrintlog("View Of Desktop Will Show");
+    VMPrintlog("..View Of Launch Items Will Show..");
     [self performSegueWithIdentifier:@"showDesktop" sender:self];
     [_aiv stopAnimating];
 }
@@ -116,17 +122,19 @@
 #pragma mark - VMWebServiceDelegate
 
 - (void)WebService:(VMWebService *)webService didFinishWithDictionary:(NSDictionary *)dic{
-    if (webService.type == VMGetLaunchItems) {
-        _launchItems = dic;
-        [self showDesktopItems];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:self.usrField.text forKey:@"username"];
-        [userDefaults setObject:self.pswField.text forKey:@"password"];
-    }
+    
+    _launchItems = dic;
+    [self showDesktopItems];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:self.usrField.text forKey:@"username"];
+    [userDefaults setObject:self.pswField.text forKey:@"password"];
+    
 }
 
 - (void)WebService:(VMWebService *)webService didFailWithDictionary:(NSDictionary *)dic{
+    [_aiv stopAnimating];
+    
     switch (webService.type) {
         case VMDoSubmitAuthentication:
             if([VMCheckResponseResult checkResponseOfAuthentication:dic] == VMAuthenticationErrorPassword){
@@ -137,21 +145,15 @@
                 [self showAlertWithTitle:@"ERROR" andMessage:errStr];
             }
             break;
-        case VMGetTunnelConnection:
-            [self showAlertWithTitle:@"ERROR" andMessage:@"Get Tunnel Connection Error"];
-            break;
-        case VMGetLaunchItems:
-            [self showAlertWithTitle:@"ERROR" andMessage:@"Get Launch Items Error"];
+        case VMGetTunnelAndLaunchItems:
+            [self showAlertWithTitle:@"ERROR" andMessage:@"Get Tunnel Connection And Get Launch Items Error"];
             break;
         default:
             break;
     }
-    
-    [_aiv stopAnimating];
 }
 
 - (void)WebService:(VMWebService *)webService didFailWithError:(NSError *)error{
-    VMPrintlog("Error occur when connect to the server");
     [self showAlertWithTitle:@"ERROR" andMessage:[error localizedDescription]];
 }
 

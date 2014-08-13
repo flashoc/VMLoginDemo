@@ -11,7 +11,11 @@
 #import "VMCheckResponseResult.h"
 
 @implementation VMWebService{
+    
 }
+
+#pragma mark - Init
+
 - (id)initWithURL:(NSURL *)url
 {
 	if (self = [super init])
@@ -25,15 +29,33 @@
 
 - (id)init
 {
-	if (self = [super init])
-	{
-        NSString *addr = [[NSUserDefaults standardUserDefaults] objectForKey:@"svr_addr"];
-        NSString *urlStr = [NSString stringWithFormat:@"https://%@/broker/xml",addr];
-        _url = [NSURL URLWithString:urlStr];
-        _host = addr;
-	}
+    //禁止调用–init或+new
+    NSAssert(NO, @"Cannot create instance of VMWebService");
+    return nil;
     
-	return self;
+//	if (self = [super init])
+//	{
+//        NSString *addr = [[NSUserDefaults standardUserDefaults] objectForKey:@"svr_addr"];
+//        NSString *urlStr = [NSString stringWithFormat:@"https://%@/broker/xml",addr];
+//        _url = [NSURL URLWithString:urlStr];
+//        _host = addr;
+//	}
+//    
+//	return self;
+}
+
+- (id)initSingleton {
+    if (self = [super init]) {
+        
+    }
+    return self;
+}
+
++ (VMWebService *)sharedSingleton {
+    static dispatch_once_t pred;
+    static VMWebService *instance = nil;
+    dispatch_once(&pred, ^{instance = [[self alloc] initSingleton];});
+    return instance;
 }
 
 - (void)dealloc
@@ -42,6 +64,21 @@
 }
 
 #pragma mark - Interface Implementation
+
+- (void) setLocaleAndGetConfigWithString:(NSString *)local{
+    self.type = VMSetLocaleAndGetConfig;
+    NSString *xmlString = [NSString stringWithFormat:
+                           @"<?xml version=\"1.0\"?>"
+                           "<broker version=\"2.0\">"
+                           "<set-locale>"
+                           "<locale>%@</locale>"
+                           "</set-locale>"
+                           "<get-configuration/>"
+                           "</broker>",local];
+    
+    VMPrintlog("**Sending [SetLocale and GetConfiguration] Request**");
+    [self postAsyncWithXML:xmlString withTimeoutInterval:10];
+}
 
 - (void)setLocaleRequestWithString:(NSString *)local{
     self.type = VMSetLocaleRequest;
@@ -104,7 +141,48 @@
                            "</do-submit-authentication>"
                            "</broker>",usr,domain,psw];
     
-    VMPrintlog("Sending [DoSubmitAuthentication] Request ...");
+    VMPrintlog("**Sending [DoSubmitAuthentication] Request**");
+    [self postAsyncWithXML:xmlString withTimeoutInterval:-1];
+}
+
+- (void) getTunnelConnectionAndLaunchItems{
+    self.type = VMGetTunnelAndLaunchItems;
+    
+    NSString *xmlString = [NSString stringWithFormat:
+                           @"<?xml version=\"1.0\"?>"
+                           "<broker version=\"9.0\">"
+                           "<get-tunnel-connection>"
+                           "<bypass-tunnel>true</bypass-tunnel>"
+                           "<multi-connection-aware>true</multi-connection-aware>"
+                           "</get-tunnel-connection>"
+                           "<get-launch-items>"
+                           "<desktops>"
+                           "<supported-protocols>"
+                           "<protocol>"
+                           "<name>PCOIP</name>"
+                           "</protocol>"
+                           "<protocol>"
+                           "<name>RDP</name>"
+                           "</protocol>"
+                           "</supported-protocols>"
+                           "</desktops>"
+                           "<applications>"
+                           "<supported-types>"
+                           "<type>"
+                           "<name>remote</name>"
+                           "<supported-protocols>"
+                           "<protocol>"
+                           "<name>PCOIP</name>"
+                           "</protocol>"
+                           "</supported-protocols>"
+                           "</type>"
+                           "</supported-types>"
+                           "</applications>"
+                           "<application-sessions />"
+                           "</get-launch-items>"
+                           "</broker>"];
+    
+    VMPrintlog("**Sending [GetTunnelConnection and GetLaunchItems] Request**");
     [self postAsyncWithXML:xmlString withTimeoutInterval:-1];
 }
 
@@ -169,7 +247,7 @@
                                 "<do-logout/>"
                            "</broker>"];
     
-    VMPrintlog("Sending [DoLogout] Request ...");
+    VMPrintlog("**Sending [DoLogout] Request**");
     [self postAsyncWithXML:xmlString withTimeoutInterval:-1];
 }
 
@@ -192,6 +270,15 @@
     
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
     
+}
+
+#pragma mark - getter/setter
+
+- (void)setUrl:(NSURL *)url{
+    if (![[_url host] isEqualToString:[url host]]) {
+        _url = url;
+        _host = [url host];
+    }
 }
 
 #pragma mark - NSURLConnectionDataDelegate
@@ -269,13 +356,13 @@
             }
             break;
         case VMDoSubmitAuthentication:
-            VMPrintlog("Response of [DoSubmitAuthentication] received");
+            VMPrintlog("**Response of [DoSubmitAuthentication] received**");
             res = [VMXMLParser responseOfAuthentication:receivedData];
             VMPrintlog("XML of [DoSubmitAuthentication] Parsed");
             
             if ([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationSuccess) {
                 VMPrintlog("response of [DoSubmitAuthentication] is success");
-                [self getTunnelConnection];
+                [self getTunnelConnectionAndLaunchItems];
             }
             else if([VMCheckResponseResult checkResponseOfAuthentication:res] == VMAuthenticationErrorPassword){
                 VMPrintlog("Error Password in response of [DoSubmitAuthentication]");
@@ -336,7 +423,7 @@
             }
             break;
         case VMDoLogout:
-            VMPrintlog("Response of [DoLogout] received");
+            VMPrintlog("**Response of [DoLogout] received**");
             res = [VMXMLParser responseOfDoLogout:receivedData];
             VMPrintlog("XML of [DoLogout] Parsed");
             
@@ -359,6 +446,52 @@
             }
             
             break;
+        case VMSetLocaleAndGetConfig:
+            VMPrintlog("**Response of [SetLocale and GetConfiguration] received**");
+            res = [VMXMLParser responseOfSetLocaleAndGetConfig:receivedData];
+            VMPrintlog("XML of [SetLocale and GetConfiguration] Parsed");
+            
+            if ([VMCheckResponseResult checkResponseOfGetConfiguration:res] == VMAuthenticationWindowsPassword) {
+                VMPrintlog("response of [SetLocale and GetConfiguration] is WindowsPassword");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFinishWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            else{
+                VMPrintlog("Error occur in response of [SetLocale and GetConfiguration]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            break;
+        case VMGetTunnelAndLaunchItems:
+            VMPrintlog("**Response of [GetTunnelConnection and GetLaunchItems] received**");
+            res = [VMXMLParser responseOfGetTunnelAndLaunchItems:receivedData];
+            VMPrintlog("XML of [GetTunnelConnection and GetLaunchItems] Parsed");
+
+            if ([VMCheckResponseResult checkResponseOfGetTunnelAndLaunchItems:res] == VMGetLaunchItemSuccess){
+                VMPrintlog("response of [GetTunnelConnection and GetLaunchItems] is success");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFinishWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+                
+            }
+            else{
+                VMPrintlog("Error occur in response of [GetTunnelConnection and GetLaunchItems]");
+                if ([self.delegate respondsToSelector:@selector(WebService:didFailWithDictionary:)]) {
+                    [self.delegate performSelector:@selector(WebService:didFailWithDictionary:)
+                                        withObject:self
+                                        withObject:res];
+                }
+            }
+            break;
+            
         default:
             break;
     }

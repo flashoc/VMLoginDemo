@@ -38,6 +38,7 @@
 		2359AB41198B2FD100C7D2A9 /* VMCheckResponseResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2359AB40198B2FD100C7D2A9 /* VMCheckResponseResult.m */; };
 		2364A3F31998C8BE00548FAF /* VMServerIPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2364A3F21998C8BE00548FAF /* VMServerIPController.m */; };
 		2364A3F61999EDCB00548FAF /* VMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2364A3F51999EDCB00548FAF /* VMLoginViewController.m */; };
+		238191E7199B639E00811BC0 /* VMLogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191E6199B639E00811BC0 /* VMLogTableViewController.m */; };
 		23E8D50D19974EE700E99DA7 /* VMGlobalFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E8D50C19974EE700E99DA7 /* VMGlobalFunction.m */; };
 /* End PBXBuildFile section */
 
@@ -109,7 +110,8 @@
 		2364A3F21998C8BE00548FAF /* VMServerIPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMServerIPController.m; sourceTree = "<group>"; };
 		2364A3F41999EDCB00548FAF /* VMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMLoginViewController.h; sourceTree = "<group>"; };
 		2364A3F51999EDCB00548FAF /* VMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMLoginViewController.m; sourceTree = "<group>"; };
-		23E8D50A1996513800E99DA7 /* MacroDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacroDefinition.h; sourceTree = "<group>"; };
+		238191E5199B639E00811BC0 /* VMLogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMLogTableViewController.h; sourceTree = "<group>"; };
+		238191E6199B639E00811BC0 /* VMLogTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMLogTableViewController.m; sourceTree = "<group>"; };
 		23E8D50B19974EE700E99DA7 /* VMGlobalFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMGlobalFunction.h; sourceTree = "<group>"; };
 		23E8D50C19974EE700E99DA7 /* VMGlobalFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMGlobalFunction.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -186,6 +188,8 @@
 				2364A3F21998C8BE00548FAF /* VMServerIPController.m */,
 				2364A3F41999EDCB00548FAF /* VMLoginViewController.h */,
 				2364A3F51999EDCB00548FAF /* VMLoginViewController.m */,
+				238191E5199B639E00811BC0 /* VMLogTableViewController.h */,
+				238191E6199B639E00811BC0 /* VMLogTableViewController.m */,
 				233362D31989F07800E93373 /* Images.xcassets */,
 				233362C21989F07800E93373 /* Supporting Files */,
 			);
@@ -240,7 +244,6 @@
 		233362F4198A6F0200E93373 /* ThirdLibs */ = {
 			isa = PBXGroup;
 			children = (
-				23E8D50A1996513800E99DA7 /* MacroDefinition.h */,
 				234953E319924E8B0033A847 /* SDWebImage */,
 				233362F5198A6F3400E93373 /* XMLSupport */,
 			);
@@ -403,6 +406,7 @@
 				234953F619924E8B0033A847 /* SDImageCache.m in Sources */,
 				233362F8198A6F3400E93373 /* GDataXMLNode.m in Sources */,
 				2364A3F31998C8BE00548FAF /* VMServerIPController.m in Sources */,
+				238191E7199B639E00811BC0 /* VMLogTableViewController.m in Sources */,
 				234953D719920D250033A847 /* VMIcon.m in Sources */,
 				233362CC1989F07800E93373 /* VMAppDelegate.m in Sources */,
 				234953FC19924E8B0033A847 /* UIImageView+WebCache.m in Sources */,

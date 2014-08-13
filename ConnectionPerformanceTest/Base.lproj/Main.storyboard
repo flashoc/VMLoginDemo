@@ -12,8 +12,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Log Message:" id="JJL-Aa-l1i">
-                                <rect key="frame" x="20" y="20" width="280" height="400"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Log:" id="JJL-Aa-l1i">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.80995516388080802" green="1" blue="0.92638742943346586" alpha="0.45000000000000001" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="9"/>
@@ -23,9 +23,9 @@
                                 <rect key="frame" x="235" y="428" width="65" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.62361046019999999" green="0.61549499090000004" blue="0.66666666669999997" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Clear"/>
+                                <state key="normal" title="New Log"/>
                                 <connections>
-                                    <action selector="clearBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="gCf-Dc-sCA"/>
+                                    <action selector="newLogBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="x6g-Ae-8Tp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NNr-am-QRl">
@@ -63,7 +63,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="ehL-nm-c7A"/>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>
@@ -74,6 +74,7 @@
                         <outlet property="logView" destination="JJL-Aa-l1i" id="ETS-0J-VdZ"/>
                         <outlet property="strBtn" destination="NNr-am-QRl" id="yHb-nN-SK2"/>
                         <segue destination="kx2-53-FDs" kind="push" identifier="InputSvrAdrr" id="rF8-bP-P5M"/>
+                        <segue destination="F8v-ul-RBv" kind="modal" identifier="showLogFiles" modalTransitionStyle="coverVertical" id="3TL-tf-Jk5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -145,6 +146,48 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="829" y="205"/>
+        </scene>
+        <!--Log Table View Controller - Log Items-->
+        <scene sceneID="FoL-nW-mUa">
+            <objects>
+                <tableViewController title="Log Items" id="F8v-ul-RBv" customClass="VMLogTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="40" sectionHeaderHeight="22" sectionFooterHeight="22" id="Hbb-gH-zYj">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="contentInset" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="directoryViewCell" textLabel="toz-iz-vS4" style="IBUITableViewCellStyleDefault" id="msR-fc-5jH">
+                                <rect key="frame" x="0.0" y="22" width="320" height="40"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="msR-fc-5jH" id="jiD-yZ-hap">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="toz-iz-vS4">
+                                            <rect key="frame" x="15" y="0.0" width="290" height="39"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="F8v-ul-RBv" id="9GL-Sh-77p"/>
+                            <outlet property="delegate" destination="F8v-ul-RBv" id="jZW-ub-wNN"/>
+                        </connections>
+                    </tableView>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="480"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zwA-sg-slF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1972" y="205"/>
         </scene>
         <!--Login View Controller - Logon-->
         <scene sceneID="giq-3x-UET">
@@ -219,7 +262,7 @@
         <scene sceneID="rK6-8f-Gtj">
             <objects>
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="6Vn-Tj-g4d" sceneMemberID="viewController">
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>

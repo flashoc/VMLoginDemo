@@ -17,6 +17,7 @@
     NSInteger _distance; //屏幕移动的距离
     CGRect _frame; //保存移动前屏幕的位置
     UIActivityIndicatorView* _aiv;
+    BOOL _switchOfLog; //日志开关
 }
 
 #pragma mark - UIViewController
@@ -41,7 +42,7 @@
     self.addrField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"server_addr"];
     
     _distance = 0;
-    
+    _switchOfLog = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -49,7 +50,11 @@
     if ([self.addrField isFirstResponder]) {
         [self.addrField resignFirstResponder];
     }
-    VMPrintlog("View Of Input Server Address Did Show");
+    if (_switchOfLog) {
+        VMPrintlog("..View Of Input Server Address Did Show..");
+        //从下个界面返回时不再打印日志
+        _switchOfLog = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,30 +97,33 @@
 #pragma mark - VMWebServiceDelegate
 
 - (void)WebService:(VMWebService *)webService didFinishWithDictionary:(NSDictionary *)dic{
-    if (webService.type == VMGetConfigurationRequest) {
-        [self nextView];
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:self.addrField.text forKey:@"server_addr"];
-    }
+    
+    [self nextView];
+    
+    //如果服务器成功响应，则保存服务器地址
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:self.addrField.text forKey:@"server_addr"];
+    
 }
 - (void)WebService:(VMWebService *)webService didFailWithDictionary:(NSDictionary *)dic{
-    switch (webService.type) {
-        case VMSetLocaleRequest:
-            [self showAlertWithTitle:@"ERROR" andMessage:@"SetLcale Error"];
-            break;
-        case VMGetConfigurationRequest:
-            [self showAlertWithTitle:@"ERROR" andMessage:[dic objectForKey:@"error-message"]];
-            break;
-        default:
-            break;
-    }
-    
     [_aiv stopAnimating];
     
+    [self showAlertWithTitle:@"ERROR" andMessage:[dic objectForKey:@"error-message"]];
+    
+//    switch (webService.type) {
+//        case VMSetLocaleRequest:
+//            [self showAlertWithTitle:@"ERROR" andMessage:@"SetLcale Error"];
+//            break;
+//        case VMGetConfigurationRequest:
+//            [self showAlertWithTitle:@"ERROR" andMessage:[dic objectForKey:@"error-message"]];
+//            break;
+//        default:
+//            break;
+//    }
 }
 
 - (void)WebService:(VMWebService *)webService didFailWithError:(NSError *)error{
-    VMPrintlog("Error occur when connect to the server");
+    [_aiv stopAnimating];
     [self showAlertWithTitle:@"ERROR" andMessage:[error localizedDescription]];
 }
 
@@ -129,24 +137,25 @@
 
 - (IBAction)nextBtnClicked:(id)sender {
     [self performSelector:@selector(showWaitingView)];
-    NSString *address = self.addrField.text;
-    [[NSUserDefaults standardUserDefaults] setObject:address forKey:@"svr_addr"];
-    VMWebService *ws = [[VMWebService alloc] init];
+    //    NSString *address = self.addrField.text;
+    //    [[NSUserDefaults standardUserDefaults] setObject:address forKey:@"svr_addr"];
+    VMWebService *ws = [VMWebService sharedSingleton];
     ws.delegate = self;
-    [ws setLocaleRequestWithString:@"en_GB"];
+    NSString *urlStr = [NSString stringWithFormat:@"https://%@/broker/xml",self.addrField.text];
+    ws.url = [NSURL URLWithString:urlStr];
+    [ws setLocaleAndGetConfigWithString:@"en_GB"];
 }
 
 #pragma mark - User Defined Functions
 
 - (void)nextView{
-    VMPrintlog("View Of Input Username And Password Will Show");
+    VMPrintlog("..View Of Input Username And Password Will Show..");
     [self performSegueWithIdentifier:@"LoginView" sender:self];
     [_aiv stopAnimating];
 }
 
 - (void)showAlertWithTitle:(NSString *)title andMessage:(NSString*)message
 {
-    [_aiv stopAnimating];
     VMPrintlog("Alert View Of Error Will Show");
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                         message:message

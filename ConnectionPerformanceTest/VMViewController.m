@@ -12,6 +12,7 @@
 #import "VMAppDelegate.h"
 #import "VMCheckResponseResult.h"
 #import "VMTableViewController.h"
+#import "VMLogTableViewController.h"
 
 #define SERVERIP @"10.117.161.67"
 #define LOGINTOSERVER @"LOGIN TO SERVER"
@@ -28,7 +29,7 @@
     NSString *_usr;
     NSString *_psw;
     NSDictionary *_launchItems;
-    BOOL _clear;
+    //    BOOL _clear;
     UIActivityIndicatorView* _aiv;
 }
 
@@ -38,7 +39,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    _clear = NO;
+    //    _clear = NO;
     [self setSubviewsLayout];
     [[[[self navigationController] navigationBar] topItem] setTitle:@"Performance Test"];
 }
@@ -58,10 +59,13 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-//    VMTableViewController *table = [segue destinationViewController];
-//    if ([table respondsToSelector:@selector(setDataSource:)]) {
-//        [table setValue:_launchItems forKey:@"dataSource"];
-//    }
+    if ([segue.identifier isEqualToString:@"showLogFiles"]) {
+        VMLogTableViewController *table = [segue destinationViewController];
+        table.delegate = self;
+        if ([table respondsToSelector:@selector(setDirectoryPath:)]) {
+            [table setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"logDirectory"] forKey:@"directoryPath"];
+        }
+    }
 }
 
 #pragma mark - PropertyFunction
@@ -109,6 +113,16 @@
     }
 }
 
+#pragma mark - VMLogTableViewDelegate
+
+- (void)showTheLogAtPath:(NSString *) filePath{
+    [self.logView setText:nil];
+    NSString *log = [NSString stringWithContentsOfFile:filePath
+                                              encoding:NSUTF8StringEncoding
+                                                 error:nil];
+    [self.logView setText:log];
+}
+
 #pragma mark - User Defined Functions
 
 //根据当前屏幕应用所占的空间布局界面上的控件
@@ -137,14 +151,24 @@
     [[self logBtn] setFrame:tempFrame];
 }
 
-- (void)showDicToScreen:(NSDictionary *)dic withDomain:(NSString *)domain{
-    if (dic) {
-        NSEnumerator *e = [dic keyEnumerator];
-        id key;
-        while (key = [e nextObject]) {
-            [self appendStringToTextView:[NSString stringWithFormat:@"[%@]: %@ = %@",domain,(NSString *)key,(NSString *)[dic objectForKey:key]]];
-        }
+//- (void)showDicToScreen:(NSDictionary *)dic withDomain:(NSString *)domain{
+//    if (dic) {
+//        NSEnumerator *e = [dic keyEnumerator];
+//        id key;
+//        while (key = [e nextObject]) {
+//            [self appendStringToTextView:[NSString stringWithFormat:@"[%@]: %@ = %@",domain,(NSString *)key,(NSString *)[dic objectForKey:key]]];
+//        }
+//    }
+//}
+
+- (void)showWaitingView {
+    if (!_aiv) {
+        _aiv = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width/2 - 50, [[UIScreen mainScreen] bounds].size.height/2 - 85,100,100)];
+        _aiv.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+        _aiv.color = [UIColor darkGrayColor];
+        [self.view addSubview:_aiv];
     }
+    [_aiv startAnimating];
 }
 
 - (void)showUserInputFieldWithTitle:(NSString *)title andMessage:(NSString *)message{
@@ -189,35 +213,40 @@
                                                        delegate:self
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
-//    [alertView setTag:tag];
+    //    [alertView setTag:tag];
     
     [alertView show];
 }
 
 //在TextView中新加一行记录
-- (void)appendStringToTextView:(NSString *)str{
-    static NSInteger order = 1;
-    if (_clear) {
-        order = 1;
-        _clear = NO;
-    }
-    NSString *appendString = [NSString stringWithFormat:@"\n%d. ", order++];
-    NSString *text = [self.logView.text stringByAppendingString:appendString];
-    self.logView.text = [text stringByAppendingString:str];
-}
+//- (void)appendStringToTextView:(NSString *)str{
+//    static NSInteger order = 1;
+//    if (_clear) {
+//        order = 1;
+//        _clear = NO;
+//    }
+//    NSString *appendString = [NSString stringWithFormat:@"\n%d. ", order++];
+//    NSString *text = [self.logView.text stringByAppendingString:appendString];
+//    self.logView.text = [text stringByAppendingString:str];
+//}
 
 #pragma mark - IBAction
 
 - (IBAction)startBtnClicked:(id)sender{
-    VMPrintlog("View Of Input Server Address Will Show");
+    VMPrintlog("..View Of Input Server Address Will Show..");
     [self performSegueWithIdentifier:@"InputSvrAdrr" sender:sender];
 }
 
-- (IBAction)clearBtnClicked:(id)sender{
-    NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:[[NSUserDefaults standardUserDefaults] objectForKey:@"logFilePath"]];
-    [file truncateFileAtOffset:0];
-    [self.logView setText:[NSString stringWithFormat:@"Log Message:"]];
-    _clear = YES;
+- (IBAction)newLogBtnClicked:(id)sender{
+    static NSInteger count = 0;
+    NSString *logFilePath = [[NSUserDefaults standardUserDefaults] stringForKey:@"logFilePath"];
+    NSString *tmpStr = [logFilePath stringByDeletingPathExtension];
+    tmpStr = [tmpStr stringByAppendingFormat:@"-%d",count++];
+    logFilePath = [tmpStr stringByAppendingPathExtension:@"log"];
+    
+    [self.logView setText:[NSString stringWithFormat:@"New Log file has been created : %@",[logFilePath lastPathComponent]]];
+    
+    freopen([logFilePath UTF8String], "a+", stdout);
 }
 
 - (IBAction)logoutBtnClicked:(id)sender{
@@ -226,21 +255,8 @@
 }
 
 - (IBAction)showlogBtnClicked:(id)sender{
-    [self.logView setText:nil];
-    NSString *log = [NSString stringWithContentsOfFile:[[NSUserDefaults standardUserDefaults] objectForKey:@"logFilePath"]
-                                              encoding:NSUTF8StringEncoding
-                                                 error:nil];
-    [self.logView setText:log];
-}
-
-- (void)showWaitingView {
-    if (!_aiv) {
-        _aiv = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width/2 - 50, [[UIScreen mainScreen] bounds].size.height/2 - 85,100,100)];
-        _aiv.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-        _aiv.color = [UIColor darkGrayColor];
-        [self.view addSubview:_aiv];
-    }
-    [_aiv startAnimating];
+    
+    [self performSegueWithIdentifier:@"showLogFiles" sender:sender];
 }
 
 @end
