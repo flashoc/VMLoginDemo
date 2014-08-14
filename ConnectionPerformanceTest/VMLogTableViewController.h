@@ -18,7 +18,7 @@
 
 @interface VMLogTableViewController : UITableViewController
 
-@property (nonatomic, strong) NSArray *directoryContent;
+@property (nonatomic, strong) NSMutableArray *directoryContent;
 @property (nonatomic, strong) NSString *directoryPath;
 @property(nonatomic, weak) id <VMLogTableViewDelegate> delegate;
 

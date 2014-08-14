@@ -82,7 +82,7 @@
 #pragma mark - VMWebServiceDelegate
 
 - (void)WebService:(VMWebService *)webService didFailWithError:(NSError *)error{
-    
+    [_aiv stopAnimating];
     [self showAlertWithTitle:@"ERROR" andMessage:[error localizedDescription] andTag:4];
 }
 
@@ -117,9 +117,11 @@
 
 - (void)showTheLogAtPath:(NSString *) filePath{
     [self.logView setText:nil];
-    NSString *log = [NSString stringWithContentsOfFile:filePath
-                                              encoding:NSUTF8StringEncoding
-                                                 error:nil];
+    NSString *log = [NSString stringWithFormat:@"Log File : %@ \n\n",[filePath lastPathComponent]];
+    
+    log = [log stringByAppendingString:[NSString stringWithContentsOfFile:filePath
+                                                                 encoding:NSUTF8StringEncoding
+                                                                    error:nil]];
     [self.logView setText:log];
 }
 

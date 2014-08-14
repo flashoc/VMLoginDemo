@@ -254,6 +254,7 @@
 //异步post XML
 - (void)postAsyncWithXML:(NSString *)xmlStr withTimeoutInterval:(NSTimeInterval)seconds
 {
+//    NSLog(@"url = %@",self.url);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url];
     NSData *postData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -507,10 +508,13 @@
     }
 }
 
+#pragma mark - NSURLConnectionDelegate
+
 // to deal with self-signed certificates
 - (BOOL)connection:(NSURLConnection *)connection
 canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
 {
+
     return [protectionSpace.authenticationMethod
             isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
@@ -518,10 +522,17 @@ canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
 - (void)connection:(NSURLConnection *)connection
 didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
+    // 获取der格式CA证书路径
+    NSString *certPath = [[NSBundle mainBundle] pathForResource:@"ca" ofType:@"der"];
+    NSLog(@"path = %@",certPath);
+
     if ([challenge.protectionSpace.authenticationMethod
          isEqualToString:NSURLAuthenticationMethodServerTrust])
     {
         // we only trust our own domain
+        NSLog(@"host = %@ authenticationMethod = %@ realm = %@",challenge.protectionSpace.host,challenge.protectionSpace.authenticationMethod,challenge.protectionSpace.realm);
+        
+        
         if ([challenge.protectionSpace.host isEqualToString:self.host])
         {
             NSURLCredential *credential =

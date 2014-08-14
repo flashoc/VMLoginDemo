@@ -75,8 +75,8 @@ static NSDictionary *_resultDic = nil;
                     [dic setObject:[valElement stringValue] forKey: [namElement stringValue]];
                 }
             }
-            else if ([[resultElement stringValue] isEqualToString:@"error"]){
-                dic = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[resultElement stringValue],[resultElement name], nil];
+            else if ([[resultElement0 stringValue] isEqualToString:@"error"]){
+                dic = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[resultElement0 stringValue],[resultElement0 name], nil];
                 GDataXMLElement *errcElement = [[configElement elementsForName:@"error-code"] objectAtIndex:0];
                 GDataXMLElement *errmsgElement = [[configElement elementsForName:@"error-message"] objectAtIndex:0];
                 [dic setObject:[errcElement stringValue] forKey:[errcElement name]];

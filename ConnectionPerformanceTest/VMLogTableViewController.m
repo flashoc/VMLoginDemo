@@ -26,12 +26,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [[self navigationController] setNavigationBarHidden:NO animated:YES];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-//    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -86,7 +86,7 @@
             [self.delegate performSelector:@selector(showTheLogAtPath:)
                                 withObject:selectedPath];
         }
-        [self dismissViewControllerAnimated:YES completion:NULL];
+        [[self navigationController] popViewControllerAnimated:YES];
     }
 }
 
@@ -100,7 +100,23 @@
 #pragma mark - user defined
 
 - (void)loadDirectoryContent{
-    _directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:_directoryPath error:nil];
+    _directoryContent = [NSMutableArray arrayWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:_directoryPath error:nil]];
+}
+
+- (BOOL)deleteFileOfName:(NSString *)name{
+    NSString *path = [_directoryPath stringByAppendingPathComponent:name];
+    BOOL canDelete = [[NSFileManager defaultManager] isDeletableFileAtPath:path];
+    if (!canDelete) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"The file is in used, can not be deleted"
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
+        return NO;
+    }
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+    return YES;
 }
 
 /*
@@ -112,18 +128,22 @@
 }
 */
 
-/*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        NSInteger row = indexPath.row;
+        NSString *fileName = [_directoryContent objectAtIndex:row];
+        
+        if ([self deleteFileOfName:fileName]) {
+            [_directoryContent removeObjectAtIndex:row];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        }
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-*/
 
 /*
 // Override to support rearranging the table view.

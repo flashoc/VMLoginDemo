@@ -12,7 +12,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Log:" id="JJL-Aa-l1i">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Content of Logs:" id="JJL-Aa-l1i">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.80995516388080802" green="1" blue="0.92638742943346586" alpha="0.45000000000000001" colorSpace="calibratedRGB"/>
@@ -74,7 +74,7 @@
                         <outlet property="logView" destination="JJL-Aa-l1i" id="ETS-0J-VdZ"/>
                         <outlet property="strBtn" destination="NNr-am-QRl" id="yHb-nN-SK2"/>
                         <segue destination="kx2-53-FDs" kind="push" identifier="InputSvrAdrr" id="rF8-bP-P5M"/>
-                        <segue destination="F8v-ul-RBv" kind="modal" identifier="showLogFiles" modalTransitionStyle="coverVertical" id="3TL-tf-Jk5"/>
+                        <segue destination="F8v-ul-RBv" kind="push" identifier="showLogFiles" id="3TL-tf-Jk5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -147,10 +147,10 @@
             </objects>
             <point key="canvasLocation" x="829" y="205"/>
         </scene>
-        <!--Log Table View Controller - Log Items-->
+        <!--Log Table View Controller - Log Files-->
         <scene sceneID="FoL-nW-mUa">
             <objects>
-                <tableViewController title="Log Items" id="F8v-ul-RBv" customClass="VMLogTableViewController" sceneMemberID="viewController">
+                <tableViewController title="Log Files" id="F8v-ul-RBv" customClass="VMLogTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="40" sectionHeaderHeight="22" sectionFooterHeight="22" id="Hbb-gH-zYj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
