@@ -11,7 +11,7 @@
 #import "VMCheckResponseResult.h"
 
 @implementation VMWebService{
-    
+    NSURLAuthenticationChallenge *_challenge;
 }
 
 #pragma mark - Init
@@ -33,15 +33,15 @@
     NSAssert(NO, @"Cannot create instance of VMWebService");
     return nil;
     
-//	if (self = [super init])
-//	{
-//        NSString *addr = [[NSUserDefaults standardUserDefaults] objectForKey:@"svr_addr"];
-//        NSString *urlStr = [NSString stringWithFormat:@"https://%@/broker/xml",addr];
-//        _url = [NSURL URLWithString:urlStr];
-//        _host = addr;
-//	}
-//    
-//	return self;
+    //	if (self = [super init])
+    //	{
+    //        NSString *addr = [[NSUserDefaults standardUserDefaults] objectForKey:@"svr_addr"];
+    //        NSString *urlStr = [NSString stringWithFormat:@"https://%@/broker/xml",addr];
+    //        _url = [NSURL URLWithString:urlStr];
+    //        _host = addr;
+    //	}
+    //
+    //	return self;
 }
 
 - (id)initSingleton {
@@ -244,7 +244,7 @@
     NSString *xmlString = [NSString stringWithFormat:
                            @"<?xml version=\"1.0\"?>"
                            "<broker version=\"1.0\">"
-                                "<do-logout/>"
+                           "<do-logout/>"
                            "</broker>"];
     
     VMPrintlog("**Sending [DoLogout] Request**");
@@ -254,7 +254,7 @@
 //异步post XML
 - (void)postAsyncWithXML:(NSString *)xmlStr withTimeoutInterval:(NSTimeInterval)seconds
 {
-//    NSLog(@"url = %@",self.url);
+    //    NSLog(@"url = %@",self.url);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url];
     NSData *postData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -313,7 +313,7 @@
 // all worked
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-//    NSString *xml = [[NSString alloc] initWithData:receivedData encoding:encoding] ;
+    //    NSString *xml = [[NSString alloc] initWithData:receivedData encoding:encoding] ;
     NSDictionary *res;
     switch (self.type) {
         case VMSetLocaleRequest:
@@ -412,7 +412,7 @@
                                         withObject:self
                                         withObject:res];
                 }
-
+                
             }
             else{
                 VMPrintlog("Error occur in response of [GetLaunchItems]");
@@ -473,7 +473,7 @@
             VMPrintlog("**Response of [GetTunnelConnection and GetLaunchItems] received**");
             res = [VMXMLParser responseOfGetTunnelAndLaunchItems:receivedData];
             VMPrintlog("XML of [GetTunnelConnection and GetLaunchItems] Parsed");
-
+            
             if ([VMCheckResponseResult checkResponseOfGetTunnelAndLaunchItems:res] == VMGetLaunchItemSuccess){
                 VMPrintlog("response of [GetTunnelConnection and GetLaunchItems] is success");
                 if ([self.delegate respondsToSelector:@selector(WebService:didFinishWithDictionary:)]) {
@@ -496,7 +496,7 @@
         default:
             break;
     }
-//    NSLog(@"xmlResponse = %@",[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+    //    NSLog(@"xmlResponse = %@",[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 }
 
 // and error occured
@@ -514,34 +514,111 @@
 - (BOOL)connection:(NSURLConnection *)connection
 canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
 {
-
-    return [protectionSpace.authenticationMethod
-            isEqualToString:NSURLAuthenticationMethodServerTrust];
+    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
 
 - (void)connection:(NSURLConnection *)connection
 didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    // 获取der格式CA证书路径
-    NSString *certPath = [[NSBundle mainBundle] pathForResource:@"ca" ofType:@"der"];
-    NSLog(@"path = %@",certPath);
-
+    if ([[challenge protectionSpace] serverTrust]) {
+        VMPrintlog("**Get the certificate of server success**");
+    }
+    
     if ([challenge.protectionSpace.authenticationMethod
          isEqualToString:NSURLAuthenticationMethodServerTrust])
     {
-        // we only trust our own domain
-        NSLog(@"host = %@ authenticationMethod = %@ realm = %@",challenge.protectionSpace.host,challenge.protectionSpace.authenticationMethod,challenge.protectionSpace.realm);
-        
+        _challenge = challenge;
         
         if ([challenge.protectionSpace.host isEqualToString:self.host])
         {
-            NSURLCredential *credential =
-            [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
-            [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+            
+            SecTrustRef trust;
+            OSStatus rv;
+            SecTrustResultType result = 0;
+            
+            // 取出服务器证书并验证
+            trust = [[challenge protectionSpace] serverTrust];
+            
+            rv = SecTrustEvaluate(trust, &result);
+            
+            if (rv) {
+                [self showAlertWithTitle:@"Error: Certificate trust could not be evaluated" andMessage:nil andTag:1];
+                [challenge.sender cancelAuthenticationChallenge:challenge];
+                VMPrintlog("**connection closed**");
+                return;
+            }
+            
+            switch (result) {
+                case kSecTrustResultProceed:
+                case kSecTrustResultUnspecified:
+                {
+                NSURLCredential *credential =[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+                    [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+                    VMPrintlog("**verification success, connection continue**");
+                }
+                    break;
+                case kSecTrustResultRecoverableTrustFailure:
+                {
+                    NSString *message = [NSString stringWithFormat:@"VMware Horizon can not verify the host: %@ please contact your server administrator for more information", challenge.protectionSpace.host];
+                    [self showAlertWithTitle:@"Untrusted Horizon Connection" andMessage:message andTag:2];
+                }
+                    break;
+                default:
+                    break;
+            
+            }
+        }
+        else{
+            [self showAlertWithTitle:@"The certificate has error host" andMessage:challenge.protectionSpace.host andTag:1];
+            [challenge.sender cancelAuthenticationChallenge:challenge];
+            VMPrintlog("**connection closed**");
         }
     }
     
-    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+    //    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+#pragma mark - user defined
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+
+{
+    if ([alertView tag] == 2) {
+        
+        if( buttonIndex == 1 ){
+            NSURLCredential *credential =[NSURLCredential credentialForTrust:_challenge.protectionSpace.serverTrust];
+            [_challenge.sender useCredential:credential forAuthenticationChallenge:_challenge];
+            VMPrintlog("**verification by user success, connection continue**");
+        }
+        else{
+            [_challenge.sender cancelAuthenticationChallenge:_challenge];
+            VMPrintlog("**connection closed**");}
+    }
+}
+
+
+
+- (void)showAlertWithTitle:(NSString *)title andMessage:(NSString*)message andTag:(NSInteger)tag
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:self
+                                              cancelButtonTitle:@"Disconnect"
+                                              otherButtonTitles:nil];
+    [alertView setTag:tag];
+    
+    switch (tag) {
+        case 1:
+//            [alertView addButtonWithTitle:@"Disconnect"];
+            break;
+        case 2:
+            [alertView addButtonWithTitle:@"Connect"];
+            break;
+        default:
+            break;
+    }
+    
+    [alertView show];
 }
 
 @end
