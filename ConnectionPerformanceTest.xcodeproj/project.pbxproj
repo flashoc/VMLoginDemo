@@ -12,22 +12,14 @@
 		233362C01989F07800E93373 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233362BF1989F07800E93373 /* UIKit.framework */; };
 		233362C61989F07800E93373 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 233362C41989F07800E93373 /* InfoPlist.strings */; };
 		233362C81989F07800E93373 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 233362C71989F07800E93373 /* main.m */; };
-		233362CC1989F07800E93373 /* VMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 233362CB1989F07800E93373 /* VMAppDelegate.m */; };
 		233362CF1989F07800E93373 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 233362CD1989F07800E93373 /* Main.storyboard */; };
-		233362D21989F07800E93373 /* VMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 233362D11989F07800E93373 /* VMViewController.m */; };
 		233362D41989F07800E93373 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 233362D31989F07800E93373 /* Images.xcassets */; };
 		233362DB1989F07800E93373 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233362DA1989F07800E93373 /* XCTest.framework */; };
 		233362DC1989F07800E93373 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233362BB1989F07800E93373 /* Foundation.framework */; };
 		233362DD1989F07800E93373 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233362BF1989F07800E93373 /* UIKit.framework */; };
 		233362E51989F07800E93373 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 233362E31989F07800E93373 /* InfoPlist.strings */; };
 		233362E71989F07800E93373 /* ConnectionPerformanceTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 233362E61989F07800E93373 /* ConnectionPerformanceTestTests.m */; };
-		233362F31989F36500E93373 /* VMWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 233362F21989F36500E93373 /* VMWebService.m */; };
 		233362F8198A6F3400E93373 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 233362F7198A6F3400E93373 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		233362FB198A7A5F00E93373 /* VMXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 233362FA198A7A5F00E93373 /* VMXMLParser.m */; };
-		234953D419920C0F0033A847 /* VMApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953D319920C0F0033A847 /* VMApplication.m */; };
-		234953D719920D250033A847 /* VMIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953D619920D250033A847 /* VMIcon.m */; };
-		234953DF199228590033A847 /* VMTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953DE199228590033A847 /* VMTableViewController.m */; };
-		234953E219922FEF0033A847 /* VMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953E119922FEF0033A847 /* VMTableViewCell.m */; };
 		234953F619924E8B0033A847 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953E519924E8B0033A847 /* SDImageCache.m */; };
 		234953F719924E8B0033A847 /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953E919924E8B0033A847 /* SDWebImageDecoder.m */; };
 		234953F819924E8B0033A847 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953EB19924E8B0033A847 /* SDWebImageDownloader.m */; };
@@ -35,11 +27,21 @@
 		234953FA19924E8B0033A847 /* SDWebImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953F119924E8B0033A847 /* SDWebImagePrefetcher.m */; };
 		234953FB19924E8B0033A847 /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953F319924E8B0033A847 /* UIButton+WebCache.m */; };
 		234953FC19924E8B0033A847 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 234953F519924E8B0033A847 /* UIImageView+WebCache.m */; };
-		2359AB41198B2FD100C7D2A9 /* VMCheckResponseResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2359AB40198B2FD100C7D2A9 /* VMCheckResponseResult.m */; };
-		2364A3F31998C8BE00548FAF /* VMServerIPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2364A3F21998C8BE00548FAF /* VMServerIPController.m */; };
-		2364A3F61999EDCB00548FAF /* VMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2364A3F51999EDCB00548FAF /* VMLoginViewController.m */; };
-		238191E7199B639E00811BC0 /* VMLogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191E6199B639E00811BC0 /* VMLogTableViewController.m */; };
-		23E8D50D19974EE700E99DA7 /* VMGlobalFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E8D50C19974EE700E99DA7 /* VMGlobalFunction.m */; };
+		238191EC19A1BA8600811BC0 /* VMApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191E919A1BA8600811BC0 /* VMApplication.m */; };
+		238191ED19A1BA8600811BC0 /* VMIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191EB19A1BA8600811BC0 /* VMIcon.m */; };
+		238191F619A1BB1B00811BC0 /* VMCheckResponseResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191EF19A1BB1B00811BC0 /* VMCheckResponseResult.m */; };
+		238191F719A1BB1B00811BC0 /* VMGlobalFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191F119A1BB1B00811BC0 /* VMGlobalFunction.m */; };
+		238191F819A1BB1B00811BC0 /* VMWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191F319A1BB1B00811BC0 /* VMWebService.m */; };
+		238191F919A1BB1B00811BC0 /* VMXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191F519A1BB1B00811BC0 /* VMXMLParser.m */; };
+		238191FD19A1BBFB00811BC0 /* VMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 238191FC19A1BBFB00811BC0 /* VMTableViewCell.m */; };
+		2381920919A1BC0800811BC0 /* VMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381920019A1BC0800811BC0 /* VMLoginViewController.m */; };
+		2381920A19A1BC0800811BC0 /* VMLogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381920219A1BC0800811BC0 /* VMLogTableViewController.m */; };
+		2381920B19A1BC0800811BC0 /* VMServerIPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381920419A1BC0800811BC0 /* VMServerIPController.m */; };
+		2381920C19A1BC0800811BC0 /* VMTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381920619A1BC0800811BC0 /* VMTableViewController.m */; };
+		2381920D19A1BC0800811BC0 /* VMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381920819A1BC0800811BC0 /* VMViewController.m */; };
+		2381921419A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */; };
+		2381921519A1BC2400811BC0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381921119A1BC2400811BC0 /* main.m */; };
+		2381921619A1BC2400811BC0 /* VMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381921319A1BC2400811BC0 /* VMAppDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,31 +63,15 @@
 		233362C51989F07800E93373 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		233362C71989F07800E93373 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		233362C91989F07800E93373 /* ConnectionPerformanceTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnectionPerformanceTest-Prefix.pch"; sourceTree = "<group>"; };
-		233362CA1989F07800E93373 /* VMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VMAppDelegate.h; sourceTree = "<group>"; };
-		233362CB1989F07800E93373 /* VMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VMAppDelegate.m; sourceTree = "<group>"; };
 		233362CE1989F07800E93373 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		233362D01989F07800E93373 /* VMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VMViewController.h; sourceTree = "<group>"; };
-		233362D11989F07800E93373 /* VMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VMViewController.m; sourceTree = "<group>"; };
 		233362D31989F07800E93373 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		233362D91989F07800E93373 /* ConnectionPerformanceTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectionPerformanceTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		233362DA1989F07800E93373 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		233362E21989F07800E93373 /* ConnectionPerformanceTestTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnectionPerformanceTestTests-Info.plist"; sourceTree = "<group>"; };
 		233362E41989F07800E93373 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		233362E61989F07800E93373 /* ConnectionPerformanceTestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectionPerformanceTestTests.m; sourceTree = "<group>"; };
-		233362F11989F36500E93373 /* VMWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMWebService.h; sourceTree = "<group>"; };
-		233362F21989F36500E93373 /* VMWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMWebService.m; sourceTree = "<group>"; };
 		233362F6198A6F3400E93373 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		233362F7198A6F3400E93373 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
-		233362F9198A7A5F00E93373 /* VMXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMXMLParser.h; sourceTree = "<group>"; };
-		233362FA198A7A5F00E93373 /* VMXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMXMLParser.m; sourceTree = "<group>"; };
-		234953D219920C0F0033A847 /* VMApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMApplication.h; sourceTree = "<group>"; };
-		234953D319920C0F0033A847 /* VMApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMApplication.m; sourceTree = "<group>"; };
-		234953D519920D240033A847 /* VMIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMIcon.h; sourceTree = "<group>"; };
-		234953D619920D250033A847 /* VMIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMIcon.m; sourceTree = "<group>"; };
-		234953DD199228590033A847 /* VMTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMTableViewController.h; sourceTree = "<group>"; };
-		234953DE199228590033A847 /* VMTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMTableViewController.m; sourceTree = "<group>"; };
-		234953E019922FEF0033A847 /* VMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMTableViewCell.h; sourceTree = "<group>"; };
-		234953E119922FEF0033A847 /* VMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMTableViewCell.m; sourceTree = "<group>"; };
 		234953E419924E8B0033A847 /* SDImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCache.h; sourceTree = "<group>"; };
 		234953E519924E8B0033A847 /* SDImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDImageCache.m; sourceTree = "<group>"; };
 		234953E619924E8B0033A847 /* SDImageCacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCacheDelegate.h; sourceTree = "<group>"; };
@@ -104,16 +90,35 @@
 		234953F319924E8B0033A847 /* UIButton+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+WebCache.m"; sourceTree = "<group>"; };
 		234953F419924E8B0033A847 /* UIImageView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+WebCache.h"; sourceTree = "<group>"; };
 		234953F519924E8B0033A847 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
-		2359AB3F198B2FD100C7D2A9 /* VMCheckResponseResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMCheckResponseResult.h; sourceTree = "<group>"; };
-		2359AB40198B2FD100C7D2A9 /* VMCheckResponseResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMCheckResponseResult.m; sourceTree = "<group>"; };
-		2364A3F11998C8BE00548FAF /* VMServerIPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMServerIPController.h; sourceTree = "<group>"; };
-		2364A3F21998C8BE00548FAF /* VMServerIPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMServerIPController.m; sourceTree = "<group>"; };
-		2364A3F41999EDCB00548FAF /* VMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMLoginViewController.h; sourceTree = "<group>"; };
-		2364A3F51999EDCB00548FAF /* VMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMLoginViewController.m; sourceTree = "<group>"; };
-		238191E5199B639E00811BC0 /* VMLogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMLogTableViewController.h; sourceTree = "<group>"; };
-		238191E6199B639E00811BC0 /* VMLogTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMLogTableViewController.m; sourceTree = "<group>"; };
-		23E8D50B19974EE700E99DA7 /* VMGlobalFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMGlobalFunction.h; sourceTree = "<group>"; };
-		23E8D50C19974EE700E99DA7 /* VMGlobalFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMGlobalFunction.m; sourceTree = "<group>"; };
+		238191E819A1BA8600811BC0 /* VMApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMApplication.h; path = Entity/VMApplication.h; sourceTree = "<group>"; };
+		238191E919A1BA8600811BC0 /* VMApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMApplication.m; path = Entity/VMApplication.m; sourceTree = "<group>"; };
+		238191EA19A1BA8600811BC0 /* VMIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMIcon.h; path = Entity/VMIcon.h; sourceTree = "<group>"; };
+		238191EB19A1BA8600811BC0 /* VMIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMIcon.m; path = Entity/VMIcon.m; sourceTree = "<group>"; };
+		238191EE19A1BB1B00811BC0 /* VMCheckResponseResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMCheckResponseResult.h; path = Utility/VMCheckResponseResult.h; sourceTree = "<group>"; };
+		238191EF19A1BB1B00811BC0 /* VMCheckResponseResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMCheckResponseResult.m; path = Utility/VMCheckResponseResult.m; sourceTree = "<group>"; };
+		238191F019A1BB1B00811BC0 /* VMGlobalFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMGlobalFunction.h; path = Utility/VMGlobalFunction.h; sourceTree = "<group>"; };
+		238191F119A1BB1B00811BC0 /* VMGlobalFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMGlobalFunction.m; path = Utility/VMGlobalFunction.m; sourceTree = "<group>"; };
+		238191F219A1BB1B00811BC0 /* VMWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMWebService.h; path = Utility/VMWebService.h; sourceTree = "<group>"; };
+		238191F319A1BB1B00811BC0 /* VMWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMWebService.m; path = Utility/VMWebService.m; sourceTree = "<group>"; };
+		238191F419A1BB1B00811BC0 /* VMXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMXMLParser.h; path = Utility/VMXMLParser.h; sourceTree = "<group>"; };
+		238191F519A1BB1B00811BC0 /* VMXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMXMLParser.m; path = Utility/VMXMLParser.m; sourceTree = "<group>"; };
+		238191FB19A1BBFB00811BC0 /* VMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMTableViewCell.h; sourceTree = "<group>"; };
+		238191FC19A1BBFB00811BC0 /* VMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMTableViewCell.m; sourceTree = "<group>"; };
+		238191FF19A1BC0800811BC0 /* VMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMLoginViewController.h; sourceTree = "<group>"; };
+		2381920019A1BC0800811BC0 /* VMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMLoginViewController.m; sourceTree = "<group>"; };
+		2381920119A1BC0800811BC0 /* VMLogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMLogTableViewController.h; sourceTree = "<group>"; };
+		2381920219A1BC0800811BC0 /* VMLogTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMLogTableViewController.m; sourceTree = "<group>"; };
+		2381920319A1BC0800811BC0 /* VMServerIPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMServerIPController.h; sourceTree = "<group>"; };
+		2381920419A1BC0800811BC0 /* VMServerIPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMServerIPController.m; sourceTree = "<group>"; };
+		2381920519A1BC0800811BC0 /* VMTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMTableViewController.h; sourceTree = "<group>"; };
+		2381920619A1BC0800811BC0 /* VMTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMTableViewController.m; sourceTree = "<group>"; };
+		2381920719A1BC0800811BC0 /* VMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMViewController.h; sourceTree = "<group>"; };
+		2381920819A1BC0800811BC0 /* VMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMViewController.m; sourceTree = "<group>"; };
+		2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ConnectionPerformanceTest-Info.plist"; sourceTree = "<group>"; };
+		2381921019A1BC2400811BC0 /* ConnectionPerformanceTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConnectionPerformanceTest-Prefix.pch"; sourceTree = "<group>"; };
+		2381921119A1BC2400811BC0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2381921219A1BC2400811BC0 /* VMAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMAppDelegate.h; sourceTree = "<group>"; };
+		2381921319A1BC2400811BC0 /* VMAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMAppDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,23 +178,12 @@
 		233362C11989F07800E93373 /* ConnectionPerformanceTest */ = {
 			isa = PBXGroup;
 			children = (
+				2381920E19A1BC2400811BC0 /* AutoGeneration */,
+				238191FE19A1BC0800811BC0 /* ViewController */,
+				238191FA19A1BBFB00811BC0 /* View */,
 				234953D119920BC70033A847 /* Entity */,
 				233362F01989F30900E93373 /* Utility */,
-				233362CA1989F07800E93373 /* VMAppDelegate.h */,
-				233362CB1989F07800E93373 /* VMAppDelegate.m */,
 				233362CD1989F07800E93373 /* Main.storyboard */,
-				233362D01989F07800E93373 /* VMViewController.h */,
-				233362D11989F07800E93373 /* VMViewController.m */,
-				234953DD199228590033A847 /* VMTableViewController.h */,
-				234953DE199228590033A847 /* VMTableViewController.m */,
-				234953E019922FEF0033A847 /* VMTableViewCell.h */,
-				234953E119922FEF0033A847 /* VMTableViewCell.m */,
-				2364A3F11998C8BE00548FAF /* VMServerIPController.h */,
-				2364A3F21998C8BE00548FAF /* VMServerIPController.m */,
-				2364A3F41999EDCB00548FAF /* VMLoginViewController.h */,
-				2364A3F51999EDCB00548FAF /* VMLoginViewController.m */,
-				238191E5199B639E00811BC0 /* VMLogTableViewController.h */,
-				238191E6199B639E00811BC0 /* VMLogTableViewController.m */,
 				233362D31989F07800E93373 /* Images.xcassets */,
 				233362C21989F07800E93373 /* Supporting Files */,
 			);
@@ -229,14 +223,14 @@
 			isa = PBXGroup;
 			children = (
 				233362F4198A6F0200E93373 /* ThirdLibs */,
-				233362F9198A7A5F00E93373 /* VMXMLParser.h */,
-				233362FA198A7A5F00E93373 /* VMXMLParser.m */,
-				233362F11989F36500E93373 /* VMWebService.h */,
-				233362F21989F36500E93373 /* VMWebService.m */,
-				2359AB3F198B2FD100C7D2A9 /* VMCheckResponseResult.h */,
-				2359AB40198B2FD100C7D2A9 /* VMCheckResponseResult.m */,
-				23E8D50B19974EE700E99DA7 /* VMGlobalFunction.h */,
-				23E8D50C19974EE700E99DA7 /* VMGlobalFunction.m */,
+				238191EE19A1BB1B00811BC0 /* VMCheckResponseResult.h */,
+				238191EF19A1BB1B00811BC0 /* VMCheckResponseResult.m */,
+				238191F019A1BB1B00811BC0 /* VMGlobalFunction.h */,
+				238191F119A1BB1B00811BC0 /* VMGlobalFunction.m */,
+				238191F219A1BB1B00811BC0 /* VMWebService.h */,
+				238191F319A1BB1B00811BC0 /* VMWebService.m */,
+				238191F419A1BB1B00811BC0 /* VMXMLParser.h */,
+				238191F519A1BB1B00811BC0 /* VMXMLParser.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -262,10 +256,10 @@
 		234953D119920BC70033A847 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				234953D219920C0F0033A847 /* VMApplication.h */,
-				234953D319920C0F0033A847 /* VMApplication.m */,
-				234953D519920D240033A847 /* VMIcon.h */,
-				234953D619920D250033A847 /* VMIcon.m */,
+				238191E819A1BA8600811BC0 /* VMApplication.h */,
+				238191E919A1BA8600811BC0 /* VMApplication.m */,
+				238191EA19A1BA8600811BC0 /* VMIcon.h */,
+				238191EB19A1BA8600811BC0 /* VMIcon.m */,
 			);
 			name = Entity;
 			sourceTree = "<group>";
@@ -293,6 +287,44 @@
 				234953F519924E8B0033A847 /* UIImageView+WebCache.m */,
 			);
 			path = SDWebImage;
+			sourceTree = "<group>";
+		};
+		238191FA19A1BBFB00811BC0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				238191FB19A1BBFB00811BC0 /* VMTableViewCell.h */,
+				238191FC19A1BBFB00811BC0 /* VMTableViewCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		238191FE19A1BC0800811BC0 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				238191FF19A1BC0800811BC0 /* VMLoginViewController.h */,
+				2381920019A1BC0800811BC0 /* VMLoginViewController.m */,
+				2381920119A1BC0800811BC0 /* VMLogTableViewController.h */,
+				2381920219A1BC0800811BC0 /* VMLogTableViewController.m */,
+				2381920319A1BC0800811BC0 /* VMServerIPController.h */,
+				2381920419A1BC0800811BC0 /* VMServerIPController.m */,
+				2381920519A1BC0800811BC0 /* VMTableViewController.h */,
+				2381920619A1BC0800811BC0 /* VMTableViewController.m */,
+				2381920719A1BC0800811BC0 /* VMViewController.h */,
+				2381920819A1BC0800811BC0 /* VMViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		2381920E19A1BC2400811BC0 /* AutoGeneration */ = {
+			isa = PBXGroup;
+			children = (
+				2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */,
+				2381921019A1BC2400811BC0 /* ConnectionPerformanceTest-Prefix.pch */,
+				2381921119A1BC2400811BC0 /* main.m */,
+				2381921219A1BC2400811BC0 /* VMAppDelegate.h */,
+				2381921319A1BC2400811BC0 /* VMAppDelegate.m */,
+			);
+			path = AutoGeneration;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -373,6 +405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				233362D41989F07800E93373 /* Images.xcassets in Resources */,
+				2381921419A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist in Resources */,
 				233362C61989F07800E93373 /* InfoPlist.strings in Resources */,
 				233362CF1989F07800E93373 /* Main.storyboard in Resources */,
 			);
@@ -393,28 +426,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2381920C19A1BC0800811BC0 /* VMTableViewController.m in Sources */,
 				234953F719924E8B0033A847 /* SDWebImageDecoder.m in Sources */,
+				2381920A19A1BC0800811BC0 /* VMLogTableViewController.m in Sources */,
+				238191F619A1BB1B00811BC0 /* VMCheckResponseResult.m in Sources */,
+				2381920D19A1BC0800811BC0 /* VMViewController.m in Sources */,
+				2381920919A1BC0800811BC0 /* VMLoginViewController.m in Sources */,
+				238191FD19A1BBFB00811BC0 /* VMTableViewCell.m in Sources */,
+				2381920B19A1BC0800811BC0 /* VMServerIPController.m in Sources */,
 				234953FB19924E8B0033A847 /* UIButton+WebCache.m in Sources */,
+				238191F919A1BB1B00811BC0 /* VMXMLParser.m in Sources */,
 				234953FA19924E8B0033A847 /* SDWebImagePrefetcher.m in Sources */,
-				234953DF199228590033A847 /* VMTableViewController.m in Sources */,
-				2359AB41198B2FD100C7D2A9 /* VMCheckResponseResult.m in Sources */,
-				234953D419920C0F0033A847 /* VMApplication.m in Sources */,
 				233362C81989F07800E93373 /* main.m in Sources */,
-				233362FB198A7A5F00E93373 /* VMXMLParser.m in Sources */,
-				234953E219922FEF0033A847 /* VMTableViewCell.m in Sources */,
-				233362D21989F07800E93373 /* VMViewController.m in Sources */,
+				238191ED19A1BA8600811BC0 /* VMIcon.m in Sources */,
+				238191F819A1BB1B00811BC0 /* VMWebService.m in Sources */,
+				2381921619A1BC2400811BC0 /* VMAppDelegate.m in Sources */,
 				234953F619924E8B0033A847 /* SDImageCache.m in Sources */,
 				233362F8198A6F3400E93373 /* GDataXMLNode.m in Sources */,
-				2364A3F31998C8BE00548FAF /* VMServerIPController.m in Sources */,
-				238191E7199B639E00811BC0 /* VMLogTableViewController.m in Sources */,
-				234953D719920D250033A847 /* VMIcon.m in Sources */,
-				233362CC1989F07800E93373 /* VMAppDelegate.m in Sources */,
+				238191EC19A1BA8600811BC0 /* VMApplication.m in Sources */,
+				238191F719A1BB1B00811BC0 /* VMGlobalFunction.m in Sources */,
 				234953FC19924E8B0033A847 /* UIImageView+WebCache.m in Sources */,
 				234953F919924E8B0033A847 /* SDWebImageManager.m in Sources */,
-				23E8D50D19974EE700E99DA7 /* VMGlobalFunction.m in Sources */,
+				2381921519A1BC2400811BC0 /* main.m in Sources */,
 				234953F819924E8B0033A847 /* SDWebImageDownloader.m in Sources */,
-				233362F31989F36500E93373 /* VMWebService.m in Sources */,
-				2364A3F61999EDCB00548FAF /* VMLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
