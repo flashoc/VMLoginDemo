@@ -12,6 +12,8 @@
 
 @implementation VMWebService{
     NSURLAuthenticationChallenge *_challenge;
+    SecTrustRef _trust;
+    NSURLProtectionSpace *_protSpace;
 }
 
 #pragma mark - Init
@@ -32,16 +34,6 @@
     //禁止调用–init或+new
     NSAssert(NO, @"Cannot create instance of VMWebService");
     return nil;
-    
-    //	if (self = [super init])
-    //	{
-    //        NSString *addr = [[NSUserDefaults standardUserDefaults] objectForKey:@"svr_addr"];
-    //        NSString *urlStr = [NSString stringWithFormat:@"https://%@/broker/xml",addr];
-    //        _url = [NSURL URLWithString:urlStr];
-    //        _host = addr;
-    //	}
-    //
-    //	return self;
 }
 
 - (id)initSingleton {
@@ -511,74 +503,22 @@
 #pragma mark - NSURLConnectionDelegate
 
 // to deal with self-signed certificates
-- (BOOL)connection:(NSURLConnection *)connection
-canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
-{
-    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-}
 
-- (void)connection:(NSURLConnection *)connection
-didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{
+- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge{
     if ([[challenge protectionSpace] serverTrust]) {
         VMPrintlog("**Get the certificate of server success**");
     }
     
-    if ([challenge.protectionSpace.authenticationMethod
-         isEqualToString:NSURLAuthenticationMethodServerTrust])
-    {
-        _challenge = challenge;
-        
-        if ([challenge.protectionSpace.host isEqualToString:self.host])
-        {
-            
-            SecTrustRef trust;
-            OSStatus rv;
-            SecTrustResultType result = 0;
-            
-            // 取出服务器证书并验证
-            trust = [[challenge protectionSpace] serverTrust];
-            
-            rv = SecTrustEvaluate(trust, &result);
-            
-            if (rv) {
-                [self showAlertWithTitle:@"Error: Certificate trust could not be evaluated" andMessage:nil andTag:1];
-                [challenge.sender cancelAuthenticationChallenge:challenge];
-                VMPrintlog("**connection closed**");
-                return;
-            }
-            
-            switch (result) {
-                case kSecTrustResultProceed:
-                case kSecTrustResultUnspecified:
-                {
-                NSURLCredential *credential =[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
-                    [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
-                    VMPrintlog("**verification success, connection continue**");
-                }
-                    break;
-                case kSecTrustResultRecoverableTrustFailure:
-                {
-                    NSString *message = [NSString stringWithFormat:@"VMware Horizon can not verify the host: %@ please contact your server administrator for more information", challenge.protectionSpace.host];
-                    [self showAlertWithTitle:@"Untrusted Horizon Connection" andMessage:message andTag:2];
-                }
-                    break;
-                default:
-                    break;
-            
-            }
-        }
-        else{
-            [self showAlertWithTitle:@"The certificate has error host" andMessage:challenge.protectionSpace.host andTag:1];
-            [challenge.sender cancelAuthenticationChallenge:challenge];
-            VMPrintlog("**connection closed**");
-        }
-    }
+    _challenge = challenge;
+    _protSpace = challenge.protectionSpace;
+    _trust = _protSpace.serverTrust;
+    SecTrustResultType result = kSecTrustResultFatalTrustFailure;
+    OSStatus status = SecTrustEvaluate(_trust, &result);
     
-    //    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+    [self checkStatus:status AndResult:result];
 }
 
-#pragma mark - user defined
+#pragma mark - UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 
@@ -592,11 +532,23 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
         }
         else{
             [_challenge.sender cancelAuthenticationChallenge:_challenge];
-            VMPrintlog("**connection closed**");}
+            VMPrintlog("**connection closed**");
+        }
+    }
+    else if([alertView tag] == 3){
+        if( buttonIndex == 1 ){
+            SecTrustResultType result = kSecTrustResultFatalTrustFailure;
+            OSStatus status = RNSecTrustEvaluateAsX509(_trust, &result);
+            [self dealWithStatus:status AndResult:result];
+        }
+        else{
+            [_challenge.sender cancelAuthenticationChallenge:_challenge];
+            VMPrintlog("**connection closed**");
+        }
     }
 }
 
-
+#pragma mark - user defined
 
 - (void)showAlertWithTitle:(NSString *)title andMessage:(NSString*)message andTag:(NSInteger)tag
 {
@@ -609,16 +561,154 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
     
     switch (tag) {
         case 1:
-//            [alertView addButtonWithTitle:@"Disconnect"];
             break;
         case 2:
             [alertView addButtonWithTitle:@"Connect"];
+            break;
+        case 3:
+            [alertView addButtonWithTitle:@"Continue"];
             break;
         default:
             break;
     }
     
     [alertView show];
+}
+
+- (void)checkValidityOfCertificate{
+    SecCertificateRef cert = SecTrustGetCertificateAtIndex(_trust,0);
+    
+    //检查证书时间有效性
+    CFAbsoluteTime start = SecCertificateNotValidBefore(cert);
+    CFAbsoluteTime end = SecCertificateNotValidAfter(cert);
+    
+    NSDate *startDate = [NSDate dateWithTimeIntervalSinceReferenceDate:start];
+    NSDate *endDate = [NSDate dateWithTimeIntervalSinceReferenceDate:end];
+    
+    NSLog(@"begin = %f , end = %f",start,end);
+    
+    NSLog(@"earlier = %f",CFAbsoluteTimeGetCurrent());
+    
+    CFStringRef subject = SecCertificateCopySubjectSummary(cert);
+    CFStringRef host = (__bridge_retained CFStringRef) _protSpace.host;
+    
+    CFComparisonResult re = CFStringCompare(host, subject, kCFCompareCaseInsensitive);
+    if (re == kCFCompareEqualTo) {
+        SecTrustResultType result = kSecTrustResultFatalTrustFailure;
+        OSStatus status = RNSecTrustEvaluateAsX509(_trust, &result);
+        [self dealWithStatus:status AndResult:result];
+    }
+    else{
+        NSString *message = [NSString stringWithFormat:@"You are Trying to access: %@, but the Certificate has subject: %@, please contact your server administrator for more information", host,subject];
+        [self showAlertWithTitle:@"Untrusted Horizon Connection" andMessage:message andTag:3];
+    }
+    CFRelease(subject);
+    CFRelease(host);
+
+}
+
+- (void)checkStatus:(OSStatus)status AndResult:(SecTrustResultType)result{
+    if (status == errSecSuccess) {
+        switch (result) {
+            case kSecTrustResultProceed:
+            case kSecTrustResultUnspecified:
+            {
+                NSLog(@"Firstly successing with result: %u", result);
+                VMPrintlog("**Verify certificate success, connection continue**");
+                NSURLCredential *cred;
+                cred = [NSURLCredential credentialForTrust:_trust];
+                [_challenge.sender useCredential:cred
+                     forAuthenticationChallenge:_challenge];
+            }
+                break;
+            case kSecTrustResultInvalid:
+            case kSecTrustResultDeny:
+            case kSecTrustResultFatalTrustFailure:
+            case kSecTrustResultOtherError:
+            {
+                NSLog(@"Firstly failing due to result: %u", result);
+                VMPrintlog("**Verify certificate fail, connection closed**");
+                [_challenge.sender cancelAuthenticationChallenge:_challenge];
+            }
+                break;
+            case kSecTrustResultRecoverableTrustFailure:
+                [self checkValidityOfCertificate];
+                break;
+            default:
+                NSAssert(NO, @"Unexpected result from trust evaluation:%u", result);
+                break;
+        }
+    }
+    else{
+        [self showAlertWithTitle:@"Error: Certificate trust could not be evaluated" andMessage:nil andTag:1];
+        [_challenge.sender cancelAuthenticationChallenge:_challenge];
+        VMPrintlog("**Certificate trust could not be evaluated, connection closed**");
+    }
+}
+
+- (void)dealWithStatus:(OSStatus)status AndResult:(SecTrustResultType)result{
+    if (status == errSecSuccess) {
+        switch (result) {
+            case kSecTrustResultProceed:
+            case kSecTrustResultUnspecified:
+            {
+                NSLog(@"Secondly verify success with result: %u", result);
+                VMPrintlog("**Verify certificate success, connection continue**");
+                NSURLCredential *cred;
+                cred = [NSURLCredential credentialForTrust:_trust];
+                [_challenge.sender useCredential:cred
+                      forAuthenticationChallenge:_challenge];
+            }
+                break;
+            case kSecTrustResultInvalid:
+            case kSecTrustResultDeny:
+            case kSecTrustResultFatalTrustFailure:
+            case kSecTrustResultOtherError:
+            {
+                NSLog(@"Secondly verify Failing due to result: %u", result);
+                VMPrintlog("**Verify certificate fail, connection closed**");
+                [_challenge.sender cancelAuthenticationChallenge:_challenge];
+            }
+                break;
+            case kSecTrustResultRecoverableTrustFailure:{
+                NSString *message = [NSString stringWithFormat:@"VMware Horizon can not verify the connection with %@, please contact your server administrator for more information", self.url];
+                [self showAlertWithTitle:@"Untrusted Horizon Connection" andMessage:message andTag:2];
+            }
+                break;
+            default:
+                NSAssert(NO, @"Unexpected result from trust evaluation:%u", result);
+                break;
+        }
+    }
+    else{
+        [self showAlertWithTitle:@"Error: Certificate trust could not be evaluated" andMessage:nil andTag:1];
+        [_challenge.sender cancelAuthenticationChallenge:_challenge];
+        VMPrintlog("**Certificate trust could not be evaluated, connection closed**");
+    }
+
+}
+
+static OSStatus RNSecTrustEvaluateAsX509(SecTrustRef trust, SecTrustResultType *result){
+    OSStatus status = errSecSuccess;
+    SecPolicyRef policy = SecPolicyCreateBasicX509();
+    SecTrustRef newTrust;
+    CFIndex numberOfCerts = SecTrustGetCertificateCount(trust);
+    CFMutableArrayRef certs;
+    certs = CFArrayCreateMutable(NULL, numberOfCerts, &kCFTypeArrayCallBacks);
+    for (NSUInteger index = 0; index < numberOfCerts; ++index) {
+        SecCertificateRef cert;
+        cert = SecTrustGetCertificateAtIndex(trust, index);
+        CFArrayAppendValue(certs, cert);
+    }
+    status = SecTrustCreateWithCertificates(certs, policy, &newTrust);
+    if (status == errSecSuccess) {
+        status = SecTrustEvaluate(newTrust, result);
+        
+    }
+    CFRelease(policy);
+    CFRelease(newTrust);
+    CFRelease(certs);
+    return status;
 }
 
 @end

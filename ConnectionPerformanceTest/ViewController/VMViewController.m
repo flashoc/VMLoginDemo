@@ -220,18 +220,6 @@
     [alertView show];
 }
 
-//在TextView中新加一行记录
-//- (void)appendStringToTextView:(NSString *)str{
-//    static NSInteger order = 1;
-//    if (_clear) {
-//        order = 1;
-//        _clear = NO;
-//    }
-//    NSString *appendString = [NSString stringWithFormat:@"\n%d. ", order++];
-//    NSString *text = [self.logView.text stringByAppendingString:appendString];
-//    self.logView.text = [text stringByAppendingString:str];
-//}
-
 #pragma mark - IBAction
 
 - (IBAction)startBtnClicked:(id)sender{
@@ -242,9 +230,7 @@
 - (IBAction)newLogBtnClicked:(id)sender{
     static NSInteger count = 0;
     NSString *logFilePath = [[NSUserDefaults standardUserDefaults] stringForKey:@"logFilePath"];
-    NSString *tmpStr = [logFilePath stringByDeletingPathExtension];
-    tmpStr = [tmpStr stringByAppendingFormat:@"-%d",count++];
-    logFilePath = [tmpStr stringByAppendingPathExtension:@"log"];
+    logFilePath = [logFilePath stringByAppendingFormat:@"-%d.log",++count];
     
     [self.logView setText:[NSString stringWithFormat:@"New Log file has been created : %@",[logFilePath lastPathComponent]]];
     

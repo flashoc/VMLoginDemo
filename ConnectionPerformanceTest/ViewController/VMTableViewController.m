@@ -7,7 +7,7 @@
 //
 
 #import "VMTableViewController.h"
-#import "SDWebImage/UIImageView+WebCache.h"
+#import "UIImageView+WebCache.h"
 #import "VMTableViewCell.h"
 #import "VMApplication.h"
 #import "VMIcon.h"

@@ -100,7 +100,12 @@
 #pragma mark - user defined
 
 - (void)loadDirectoryContent{
-    _directoryContent = [NSMutableArray arrayWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:_directoryPath error:nil]];
+    if (!_directoryContent) {
+        _directoryContent = [[NSMutableArray alloc] init];
+    }
+    NSArray* reversedArray = [[[[NSFileManager defaultManager] contentsOfDirectoryAtPath:_directoryPath
+                                                                                   error:nil] reverseObjectEnumerator] allObjects];
+    [_directoryContent setArray:reversedArray];
 }
 
 - (BOOL)deleteFileOfName:(NSString *)name{

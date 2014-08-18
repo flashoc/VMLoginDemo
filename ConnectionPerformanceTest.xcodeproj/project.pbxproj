@@ -40,7 +40,6 @@
 		2381920C19A1BC0800811BC0 /* VMTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381920619A1BC0800811BC0 /* VMTableViewController.m */; };
 		2381920D19A1BC0800811BC0 /* VMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381920819A1BC0800811BC0 /* VMViewController.m */; };
 		2381921419A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */; };
-		2381921519A1BC2400811BC0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381921119A1BC2400811BC0 /* main.m */; };
 		2381921619A1BC2400811BC0 /* VMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2381921319A1BC2400811BC0 /* VMAppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -59,10 +58,8 @@
 		233362BB1989F07800E93373 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		233362BD1989F07800E93373 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		233362BF1989F07800E93373 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		233362C31989F07800E93373 /* ConnectionPerformanceTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnectionPerformanceTest-Info.plist"; sourceTree = "<group>"; };
 		233362C51989F07800E93373 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		233362C71989F07800E93373 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		233362C91989F07800E93373 /* ConnectionPerformanceTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnectionPerformanceTest-Prefix.pch"; sourceTree = "<group>"; };
 		233362CE1989F07800E93373 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		233362D31989F07800E93373 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		233362D91989F07800E93373 /* ConnectionPerformanceTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectionPerformanceTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,9 +111,8 @@
 		2381920619A1BC0800811BC0 /* VMTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMTableViewController.m; sourceTree = "<group>"; };
 		2381920719A1BC0800811BC0 /* VMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMViewController.h; sourceTree = "<group>"; };
 		2381920819A1BC0800811BC0 /* VMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMViewController.m; sourceTree = "<group>"; };
-		2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ConnectionPerformanceTest-Info.plist"; sourceTree = "<group>"; };
-		2381921019A1BC2400811BC0 /* ConnectionPerformanceTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ConnectionPerformanceTest-Prefix.pch"; sourceTree = "<group>"; };
-		2381921119A1BC2400811BC0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ConnectionPerformanceTest-Info.plist"; path = "AutoGeneration/ConnectionPerformanceTest-Info.plist"; sourceTree = "<group>"; };
+		2381921019A1BC2400811BC0 /* ConnectionPerformanceTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ConnectionPerformanceTest-Prefix.pch"; path = "AutoGeneration/ConnectionPerformanceTest-Prefix.pch"; sourceTree = "<group>"; };
 		2381921219A1BC2400811BC0 /* VMAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMAppDelegate.h; sourceTree = "<group>"; };
 		2381921319A1BC2400811BC0 /* VMAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VMAppDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,10 +189,10 @@
 		233362C21989F07800E93373 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				233362C31989F07800E93373 /* ConnectionPerformanceTest-Info.plist */,
+				2381921019A1BC2400811BC0 /* ConnectionPerformanceTest-Prefix.pch */,
+				2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */,
 				233362C41989F07800E93373 /* InfoPlist.strings */,
 				233362C71989F07800E93373 /* main.m */,
-				233362C91989F07800E93373 /* ConnectionPerformanceTest-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -318,9 +314,6 @@
 		2381920E19A1BC2400811BC0 /* AutoGeneration */ = {
 			isa = PBXGroup;
 			children = (
-				2381920F19A1BC2400811BC0 /* ConnectionPerformanceTest-Info.plist */,
-				2381921019A1BC2400811BC0 /* ConnectionPerformanceTest-Prefix.pch */,
-				2381921119A1BC2400811BC0 /* main.m */,
 				2381921219A1BC2400811BC0 /* VMAppDelegate.h */,
 				2381921319A1BC2400811BC0 /* VMAppDelegate.m */,
 			);
@@ -447,7 +440,6 @@
 				238191F719A1BB1B00811BC0 /* VMGlobalFunction.m in Sources */,
 				234953FC19924E8B0033A847 /* UIImageView+WebCache.m in Sources */,
 				234953F919924E8B0033A847 /* SDWebImageManager.m in Sources */,
-				2381921519A1BC2400811BC0 /* main.m in Sources */,
 				234953F819924E8B0033A847 /* SDWebImageDownloader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -574,13 +566,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ConnectionPerformanceTest/ConnectionPerformanceTest-Prefix.pch";
+				GCC_PREFIX_HEADER = "ConnectionPerformanceTest/AutoGeneration/ConnectionPerformanceTest-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/include/libxml2,
 				);
-				INFOPLIST_FILE = "ConnectionPerformanceTest/ConnectionPerformanceTest-Info.plist";
+				INFOPLIST_FILE = "ConnectionPerformanceTest/AutoGeneration/ConnectionPerformanceTest-Info.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -594,13 +586,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ConnectionPerformanceTest/ConnectionPerformanceTest-Prefix.pch";
+				GCC_PREFIX_HEADER = "ConnectionPerformanceTest/AutoGeneration/ConnectionPerformanceTest-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/include/libxml2,
 				);
-				INFOPLIST_FILE = "ConnectionPerformanceTest/ConnectionPerformanceTest-Info.plist";
+				INFOPLIST_FILE = "ConnectionPerformanceTest/AutoGeneration/ConnectionPerformanceTest-Info.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";

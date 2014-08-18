@@ -76,12 +76,14 @@
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *dateStr = [formatter stringFromDate:[NSDate date]];
     
-    NSString *logFilePath = [logDirectory stringByAppendingFormat:@"/%@.log",dateStr];
+    NSString *logFilePath = [logDirectory stringByAppendingPathComponent:dateStr];
     
     [[NSUserDefaults standardUserDefaults] setObject:logFilePath forKey:@"logFilePath"];
     [[NSUserDefaults standardUserDefaults] setObject:logDirectory forKey:@"logDirectory"];
     // 将log输入到文件
-    freopen([logFilePath UTF8String], "a+", stdout);
+    NSString *log = [logFilePath stringByAppendingString:@"-0.log"];
+    
+    freopen([log UTF8String], "a+", stdout);
 }
 
 @end
