@@ -82,6 +82,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:logDirectory forKey:@"logDirectory"];
     // 将log输入到文件
     NSString *log = [logFilePath stringByAppendingString:@"-0.log"];
+    [[NSUserDefaults standardUserDefaults] setObject:log forKey:@"CurrentLogFile"];
     
     freopen([log UTF8String], "a+", stdout);
 }

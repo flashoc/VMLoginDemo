@@ -224,6 +224,14 @@
 
 - (IBAction)startBtnClicked:(id)sender{
     VMPrintlog("..View Of Input Server Address Will Show..");
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSString *path = [[NSUserDefaults standardUserDefaults] stringForKey:@"CurrentLogFile"];
+	BOOL fileExists = [fm fileExistsAtPath:path];
+    if (!fileExists) {
+		[fm createFileAtPath:path contents:nil attributes:nil];
+	}
+    
     [self performSegueWithIdentifier:@"InputSvrAdrr" sender:sender];
 }
 
@@ -231,6 +239,7 @@
     static NSInteger count = 0;
     NSString *logFilePath = [[NSUserDefaults standardUserDefaults] stringForKey:@"logFilePath"];
     logFilePath = [logFilePath stringByAppendingFormat:@"-%d.log",++count];
+    [[NSUserDefaults standardUserDefaults] setObject:logFilePath forKey:@"CurrentLogFile"];
     
     [self.logView setText:[NSString stringWithFormat:@"New Log file has been created : %@",[logFilePath lastPathComponent]]];
     

@@ -9,6 +9,7 @@
 #import "VMWebService.h"
 #import "VMXMLParser.h"
 #import "VMCheckResponseResult.h"
+#import "SecCert.h"
 
 @implementation VMWebService{
     NSURLAuthenticationChallenge *_challenge;
@@ -528,7 +529,7 @@
         if( buttonIndex == 1 ){
             NSURLCredential *credential =[NSURLCredential credentialForTrust:_challenge.protectionSpace.serverTrust];
             [_challenge.sender useCredential:credential forAuthenticationChallenge:_challenge];
-            VMPrintlog("**verification by user success, connection continue**");
+            VMPrintlog("**Verification by user success, connection continue**");
         }
         else{
             [_challenge.sender cancelAuthenticationChallenge:_challenge];
@@ -540,6 +541,15 @@
             SecTrustResultType result = kSecTrustResultFatalTrustFailure;
             OSStatus status = RNSecTrustEvaluateAsX509(_trust, &result);
             [self dealWithStatus:status AndResult:result];
+        }
+        else{
+            [_challenge.sender cancelAuthenticationChallenge:_challenge];
+            VMPrintlog("**connection closed**");
+        }
+    }
+    else if([alertView tag] == 4){
+        if( buttonIndex == 1 ){
+            [self checkSubjectOfCertificate];
         }
         else{
             [_challenge.sender cancelAuthenticationChallenge:_challenge];
@@ -566,6 +576,7 @@
             [alertView addButtonWithTitle:@"Connect"];
             break;
         case 3:
+        case 4:
             [alertView addButtonWithTitle:@"Continue"];
             break;
         default:
@@ -584,10 +595,20 @@
     
     NSDate *startDate = [NSDate dateWithTimeIntervalSinceReferenceDate:start];
     NSDate *endDate = [NSDate dateWithTimeIntervalSinceReferenceDate:end];
+    NSDate *curr = [NSDate date];
     
-    NSLog(@"begin = %f , end = %f",start,end);
-    
-    NSLog(@"earlier = %f",CFAbsoluteTimeGetCurrent());
+    if ([[startDate earlierDate:curr] isEqualToDate:startDate] && [[endDate laterDate:curr] isEqualToDate:endDate]) {
+        [self checkSubjectOfCertificate];
+    }
+    else{
+        VMPrintlog("**The certificate has errors in period of validity**");
+        NSString *message = [NSString stringWithFormat:@"The certificate is out of date, period of validity is from %@ to %@, please contact your server administrator for more information", startDate, endDate];
+        [self showAlertWithTitle:@"Untrusted Horizon Connection" andMessage:message andTag:4];
+    }
+}
+
+- (void) checkSubjectOfCertificate{
+    SecCertificateRef cert = SecTrustGetCertificateAtIndex(_trust,0);
     
     CFStringRef subject = SecCertificateCopySubjectSummary(cert);
     CFStringRef host = (__bridge_retained CFStringRef) _protSpace.host;
@@ -599,12 +620,12 @@
         [self dealWithStatus:status AndResult:result];
     }
     else{
+        VMPrintlog("**The certificate has error in subject**");
         NSString *message = [NSString stringWithFormat:@"You are Trying to access: %@, but the Certificate has subject: %@, please contact your server administrator for more information", host,subject];
         [self showAlertWithTitle:@"Untrusted Horizon Connection" andMessage:message andTag:3];
     }
     CFRelease(subject);
     CFRelease(host);
-
 }
 
 - (void)checkStatus:(OSStatus)status AndResult:(SecTrustResultType)result{
@@ -671,6 +692,7 @@
             }
                 break;
             case kSecTrustResultRecoverableTrustFailure:{
+                VMPrintlog("**The certificate is self-signed certificate**");
                 NSString *message = [NSString stringWithFormat:@"VMware Horizon can not verify the connection with %@, please contact your server administrator for more information", self.url];
                 [self showAlertWithTitle:@"Untrusted Horizon Connection" andMessage:message andTag:2];
             }
